@@ -1,0 +1,83 @@
+name: Auto Deploy to GitHub
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build project
+      run: npm run build
+
+    - name: Run tests (if available)
+      run: npm test --if-present
+
+    - name: Auto commit build artifacts
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Add any build artifacts or generated files
+        git add .
+        
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "chore: auto-update build artifacts [skip ci]"
+          git push
+        fi
+
+  deploy-vercel:
+    runs-on: ubuntu-latest
+    needs: auto-commit
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: '--prod'
+
+  notify-completion:
+    runs-on: ubuntu-latest
+    needs: [auto-commit, deploy-vercel]
+    if: always()
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        if [ "${{ needs.auto-commit.result }}" == "success" ] && [ "${{ needs.deploy-vercel.result }}" == "success" ]; then
+          echo "✅ 배포 완료: https://temon.kr"
+          echo "🚀 새로운 기능이 자동으로 배포되었습니다!"
+        else
+          echo "❌ 배포 실패"
+          echo "자세한 내용은 GitHub Actions 로그를 확인하세요."
+        fi

@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Auto Deploy to GitHub",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "deploy"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "개발 완료 시 자동으로 GitHub에 배포합니다."
+    },
+    {
+      "label": "Auto Deploy (Windows)",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "auto-deploy:win"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Windows용 자동 배포 스크립트"
+    },
+    {
+      "label": "Auto Deploy (Linux/Mac)",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "auto-deploy"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Linux/Mac용 자동 배포 스크립트"
+    }
+  ]
+}
