@@ -1,7 +1,7 @@
 // 자동 퀴즈 등록 시스템
 // 새로운 퀴즈가 개발되면 자동으로 테스트 목록에 추가되는 시스템
 
-import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, type LucideIcon } from "lucide-react"
+import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, Camera, type LucideIcon } from "lucide-react"
 
 export interface Test {
   id: string
@@ -203,6 +203,21 @@ export const QUIZ_REGISTRATION_RULES: QuizRegistrationRule[] = [
       color: "from-pink-500 to-purple-600",
       category: "음식",
       tags: ["디저트", "카페", "달콤함", "성격"]
+    },
+    optional: {
+      badge: "NEW",
+      new: true
+    }
+  },
+  {
+    idPattern: "photo-style",
+    autoGenerate: {
+      title: "📸 사진 찍는 스타일 테스트",
+      description: "찰칵! 사진 한 장에도 성격이 보인다",
+      icon: Camera,
+      color: "from-purple-500 to-pink-600",
+      category: "생활",
+      tags: ["사진", "촬영", "스타일", "성격"]
     },
     optional: {
       badge: "NEW",

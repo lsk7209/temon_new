@@ -2,6 +2,7 @@ import { ImageResponse } from '@vercel/og'
 import { NextRequest } from 'next/server'
 import { getResultByType } from '@/data/travelPackConfig'
 import { getDessertResult } from '@/data/dessertResults'
+import { getPhotoResult } from '@/data/photoResults'
 
 export const runtime = 'edge'
 
@@ -21,6 +22,11 @@ export async function GET(req: NextRequest) {
     result = dessertResult
     title = overrideTitle || dessertResult?.title || `${type} 디저트러`
     summary = overrideSummary || dessertResult?.tagline || '디저트를 고르는 순간, 당신의 성격이 드러난다'
+  } else if (testType === 'photo-style') {
+    const photoResult = getPhotoResult(type as any)
+    result = photoResult
+    title = overrideTitle || photoResult?.title || `${type} 사진러`
+    summary = overrideSummary || photoResult?.tagline || '찰칵! 사진 한 장에도 성격이 보인다'
   } else {
     const travelResult = getResultByType(type)
     result = travelResult
