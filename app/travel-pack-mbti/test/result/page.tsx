@@ -135,47 +135,16 @@ export default function TravelPackResultPage() {
       <div className="max-w-4xl mx-auto">
         {/* 결과 헤더 */}
         <Card className="mb-8 overflow-hidden">
-          <div className={`bg-gradient-to-r ${result.color || 'from-blue-500 to-purple-600'} p-8 text-white text-center`}>
-            <div className="text-6xl mb-4">{result.emoji}</div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">{result.title}</h1>
-            <Badge className="bg-white/20 text-white border-white/30 text-lg px-4 py-2">
-              {result.type}
-            </Badge>
-            <p className="text-xl mt-4 opacity-90">{result.tagline}</p>
-          </div>
-          
-          {/* OG 이미지 미리보기 */}
-          <div className="p-6 bg-white">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">공유용 이미지</h3>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleShare('copy')}
-                  className="flex items-center gap-2"
-                >
-                  <Copy className="h-4 w-4" />
-                  {showCopied ? '복사됨!' : '복사'}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleShare('kakao')}
-                  className="flex items-center gap-2"
-                >
-                  <Share2 className="h-4 w-4" />
-                  카카오
-                </Button>
-              </div>
-            </div>
-            <div className="border rounded-lg overflow-hidden">
-              <img
-                src={`/api/og?type=${result.type}&title=${encodeURIComponent(result.title)}&summary=${encodeURIComponent(result.tagline)}&emoji=${result.emoji}&bg=${result.og.bg}`}
-                alt={`${result.title} 결과 이미지`}
-                className="w-full h-auto"
-                style={{ aspectRatio: '1200/630' }}
-              />
+          <div className={`bg-gradient-to-r ${result.color || 'from-blue-500 to-purple-600'} p-8 text-white text-center relative`}>
+            {/* 텍스트 가독성을 위한 오버레이 */}
+            <div className="absolute inset-0 bg-black/20 rounded-t-lg"></div>
+            <div className="relative z-10">
+              <div className="text-6xl mb-4 drop-shadow-lg">{result.emoji}</div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg text-white">{result.title}</h1>
+              <Badge className="bg-white/30 text-white border-white/50 text-lg px-4 py-2 drop-shadow-md">
+                {result.type}
+              </Badge>
+              <p className="text-xl mt-4 opacity-95 drop-shadow-md text-white">{result.tagline}</p>
             </div>
           </div>
         </Card>

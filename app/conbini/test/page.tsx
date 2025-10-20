@@ -79,6 +79,15 @@ export default function ConbiniTestPage() {
               <ShoppingCart className="w-8 h-8 text-orange-500 mr-3" />
               <span className="text-lg font-semibold text-gray-700">편의점 장바구니 테스트</span>
             </div>
+            {/* 질문 관련 OG 이미지 */}
+            <div className="mb-4">
+              <img
+                src={`/api/og?testType=conbini&question=${encodeURIComponent(currentQ.title)}&emoji=🛒&bg=orange-gradient`}
+                alt={`질문 ${currentQuestion + 1} 이미지`}
+                className="w-full max-w-sm mx-auto rounded-lg shadow-md"
+                style={{ aspectRatio: '16/9' }}
+              />
+            </div>
             <CardTitle className="text-2xl md:text-3xl text-gray-900 leading-relaxed">
               {currentQ.title}
             </CardTitle>

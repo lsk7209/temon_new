@@ -67,6 +67,15 @@ export default function PhoneTestPage() {
       <Card className="w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl border-none">
         <CardHeader className="text-center p-6 pb-4">
           <Progress value={progress} className="w-full mb-4 h-2" />
+          {/* 질문 관련 OG 이미지 */}
+          <div className="mb-4">
+            <img
+              src={`/api/og?testType=phone-style&question=${encodeURIComponent(currentQuestion.title)}&emoji=📱&bg=blue-gradient`}
+              alt={`질문 ${currentQuestionIndex + 1} 이미지`}
+              className="w-full max-w-sm mx-auto rounded-lg shadow-md"
+              style={{ aspectRatio: '16/9' }}
+            />
+          </div>
           <CardTitle className="text-2xl font-bold text-gray-800 mb-4">
             {currentQuestionIndex + 1}. {currentQuestion.title}
           </CardTitle>

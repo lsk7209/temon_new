@@ -104,6 +104,15 @@ export default function DessertStyleTestPage() {
                 <div className="text-3xl animate-pulse delay-150">☕</div>
                 <div className="text-3xl animate-bounce delay-300">🍪</div>
               </div>
+              {/* 질문 관련 OG 이미지 */}
+              <div className="mb-4">
+                <img
+                  src={`/api/og?testType=dessert-style&question=${encodeURIComponent(question.title)}&emoji=🍰&bg=pink-gradient`}
+                  alt={`질문 ${currentQuestion} 이미지`}
+                  className="w-full max-w-sm mx-auto rounded-lg shadow-md"
+                  style={{ aspectRatio: '16/9' }}
+                />
+              </div>
               <CardTitle className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
                 {question.title}
               </CardTitle>

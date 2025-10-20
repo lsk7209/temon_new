@@ -136,6 +136,15 @@ export default function TravelPackTestPage() {
         {/* 질문 카드 */}
         <Card className="mb-8">
           <CardHeader className="text-center pb-4">
+            {/* 질문 관련 OG 이미지 */}
+            <div className="mb-4">
+              <img
+                src={`/api/og?testType=travel-pack-mbti&question=${encodeURIComponent(question.question)}&emoji=🎒&bg=blue-gradient`}
+                alt={`질문 ${currentQuestion + 1} 이미지`}
+                className="w-full max-w-sm mx-auto rounded-lg shadow-md"
+                style={{ aspectRatio: '16/9' }}
+              />
+            </div>
             <CardTitle className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
               {question.question}
             </CardTitle>

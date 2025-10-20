@@ -15,30 +15,7 @@ export async function GET(req: NextRequest) {
   const overrideSummary = searchParams.get('summary')
   const bg = searchParams.get('bg') || 'gradient-blue'
   const testType = searchParams.get('testType') || 'travel-pack'
-
-  let result, title, summary
-
-  if (testType === 'dessert-style') {
-    const dessertResult = getDessertResult(type as any)
-    result = dessertResult
-    title = overrideTitle || dessertResult?.title || `${type} 디저트러`
-    summary = overrideSummary || dessertResult?.tagline || '디저트를 고르는 순간, 당신의 성격이 드러난다'
-  } else if (testType === 'photo-style') {
-    const photoResult = getPhotoResult(type as any)
-    result = photoResult
-    title = overrideTitle || photoResult?.title || `${type} 사진러`
-    summary = overrideSummary || photoResult?.tagline || '찰칵! 사진 한 장에도 성격이 보인다'
-  } else if (testType === 'phone-style') {
-    const phoneResult = getPhoneResult(type as any)
-    result = phoneResult
-    title = overrideTitle || phoneResult?.title || `${type} 폰유저`
-    summary = overrideSummary || phoneResult?.tagline || '스마트폰을 켜는 순간, 당신의 성격이 드러난다'
-  } else {
-    const travelResult = getResultByType(type)
-    result = travelResult
-    title = overrideTitle || travelResult?.title || `${type} 여행자`
-    summary = overrideSummary || travelResult?.tagline || '여행 짐 싸는 습관으로 보는 성격'
-  }
+  const question = searchParams.get('question')
 
   const backgroundGradients = {
     'gradient-blue': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -79,8 +56,60 @@ export async function GET(req: NextRequest) {
     'warm-cream': 'linear-gradient(135deg, #F5CBA7 0%, #F5BB97 100%)',
     'sage-green': 'linear-gradient(135deg, #9AD0B2 0%, #8AC0A2 100%)',
     'navy-blue': 'linear-gradient(135deg, #2F3E46 0%, #1F2E36 100%)',
-    'charcoal': 'linear-gradient(135deg, #4E4E50 0%, #3E3E40 100%)'
+    'charcoal': 'linear-gradient(135deg, #4E4E50 0%, #3E3E40 100%)',
+    // 질문용 배경
+    'blue-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'purple-gradient': 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    'pink-gradient': 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+    'orange-gradient': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)'
   } as const
+
+  // 질문용 이미지인 경우
+  if (question) {
+    return new ImageResponse(
+      (
+        <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: backgroundGradients[bg as keyof typeof backgroundGradients] || backgroundGradients['blue-gradient'], position: 'relative', fontFamily: 'Inter, sans-serif' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at 20% 80%, rgba(255,255,255,.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,.1) 0%, transparent 50%)' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '40px', zIndex: 1 }}>
+            <div style={{ fontSize: '80px', lineHeight: 1, marginBottom: '20px' }}>{emoji}</div>
+            <h1 style={{ color: 'white', fontSize: '48px', fontWeight: 'bold', margin: '0 0 20px 0', textShadow: '2px 2px 4px rgba(0,0,0,.3)', lineHeight: 1.2, maxWidth: '800px' }}>{question}</h1>
+            <div style={{ background: 'rgba(255,255,255,.2)', borderRadius: '15px', padding: '12px 20px', border: '2px solid rgba(255,255,255,.3)', backdropFilter: 'blur(10px)' }}>
+              <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>테몬 MBTI</span>
+            </div>
+          </div>
+        </div>
+      ),
+      { width: 1200, height: 630, headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800' } }
+    )
+  }
+
+  let result, title, summary
+
+  if (testType === 'dessert-style') {
+    const dessertResult = getDessertResult(type as any)
+    result = dessertResult
+    title = overrideTitle || dessertResult?.title || `${type} 디저트러`
+    summary = overrideSummary || dessertResult?.tagline || '디저트를 고르는 순간, 당신의 성격이 드러난다'
+  } else if (testType === 'photo-style') {
+    const photoResult = getPhotoResult(type as any)
+    result = photoResult
+    title = overrideTitle || photoResult?.title || `${type} 사진러`
+    summary = overrideSummary || photoResult?.tagline || '찰칵! 사진 한 장에도 성격이 보인다'
+  } else if (testType === 'phone-style') {
+    const phoneResult = getPhoneResult(type as any)
+    result = phoneResult
+    title = overrideTitle || phoneResult?.title || `${type} 폰유저`
+    summary = overrideSummary || phoneResult?.tagline || '스마트폰을 켜는 순간, 당신의 성격이 드러난다'
+  } else if (testType === 'conbini') {
+    // 편의점 테스트는 별도 결과 데이터가 없으므로 기본값 사용
+    title = overrideTitle || `${type} 편의점러`
+    summary = overrideSummary || '편의점 쇼핑 습관으로 보는 성격'
+  } else {
+    const travelResult = getResultByType(type)
+    result = travelResult
+    title = overrideTitle || travelResult?.title || `${type} 여행자`
+    summary = overrideSummary || travelResult?.tagline || '여행 짐 싸는 습관으로 보는 성격'
+  }
 
   const backgroundStyle = backgroundGradients[bg as keyof typeof backgroundGradients] || backgroundGradients['gradient-blue']
 
