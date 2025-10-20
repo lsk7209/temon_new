@@ -4,18 +4,12 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { generateTestMetadata, generateStructuredData } from "@/lib/seo"
+import { generateStructuredData } from "@/lib/seo"
 import { trackPageVisit, trackClick } from "@/lib/analytics"
 import Link from "next/link"
 import { ArrowRight, Users, Clock, Star, CheckCircle, HelpCircle, Share2, Heart } from "lucide-react"
 
-export const metadata = generateTestMetadata({
-  title: "여행 짐 싸는 스타일 테스트",
-  description: "여행 전날 밤, 당신의 캐리어는 이미 성격을 말하고 있어요. 짐 싸는 습관으로 알아보는 MBTI 16유형",
-  slug: "travel-pack-mbti",
-  category: "여행",
-  icon: "🎒"
-})
+
 
 const features = [
   {
