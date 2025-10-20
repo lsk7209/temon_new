@@ -10,7 +10,7 @@ import { useState, useEffect } from "react"
 import { trackClick, trackSearch } from "@/lib/analytics"
 import { getAllTests, CATEGORIES } from "@/lib/tests-config"
 
-const TESTS_PER_PAGE = 12
+const TESTS_PER_PAGE = 9
 
 export default function TestsPage() {
   const allTests = getAllTests()

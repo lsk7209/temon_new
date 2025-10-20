@@ -1,4 +1,5 @@
-import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, type LucideIcon } from "lucide-react"
+import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, type LucideIcon } from "lucide-react"
+import { getAllRegisteredQuizzes } from "./auto-test-registry"
 
 export interface Test {
   id: string
@@ -14,9 +15,12 @@ export interface Test {
   tags: string[]
   popular?: boolean
   new?: boolean
+  completed?: boolean
+  createdDate?: string
 }
 
-export const ALL_TESTS: Test[] = [
+// 기존 수동 등록된 테스트들
+const MANUAL_TESTS: Test[] = [
   {
     id: "coffee-mbti",
     title: "☕ 커피 MBTI",
@@ -134,21 +138,12 @@ export const ALL_TESTS: Test[] = [
     tags: ["K-팝", "아이돌", "포지션", "성격"],
     new: true,
   },
-  {
-    id: "travel-pack-mbti",
-    title: "🎒 여행 짐 싸는 스타일 테스트",
-    description: "여행 전날 밤, 당신의 캐리어는 이미 성격을 말하고 있어요",
-    icon: Luggage,
-    href: "/travel-pack-mbti",
-    color: "from-blue-400 to-purple-500",
-    participants: "12,000",
-    rating: 4.9,
-    badge: "HOT",
-    category: "여행",
-    tags: ["여행", "짐싸기", "캐리어", "여행준비"],
-    popular: true,
-    new: true
-  },
+]
+
+// 자동 등록된 퀴즈와 수동 테스트를 합쳐서 전체 테스트 목록 생성
+export const ALL_TESTS: Test[] = [
+  ...MANUAL_TESTS,
+  ...getAllRegisteredQuizzes()
 ]
 
 // Get all unique categories
