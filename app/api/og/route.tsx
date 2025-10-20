@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server'
 import { getResultByType } from '@/data/travelPackConfig'
 import { getDessertResult } from '@/data/dessertResults'
 import { getPhotoResult } from '@/data/photoResults'
+import { getPhoneResult } from '@/data/phoneResults'
 
 export const runtime = 'edge'
 
@@ -27,6 +28,11 @@ export async function GET(req: NextRequest) {
     result = photoResult
     title = overrideTitle || photoResult?.title || `${type} 사진러`
     summary = overrideSummary || photoResult?.tagline || '찰칵! 사진 한 장에도 성격이 보인다'
+  } else if (testType === 'phone-style') {
+    const phoneResult = getPhoneResult(type as any)
+    result = phoneResult
+    title = overrideTitle || phoneResult?.title || `${type} 폰유저`
+    summary = overrideSummary || phoneResult?.tagline || '스마트폰을 켜는 순간, 당신의 성격이 드러난다'
   } else {
     const travelResult = getResultByType(type)
     result = travelResult

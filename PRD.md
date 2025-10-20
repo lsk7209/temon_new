@@ -178,6 +178,7 @@ CREATE TABLE uploads (
 편의점 장바구니 MBTI: from-orange-400 to-red-500
 디저트 취향 MBTI: from-pink-500 to-purple-600
 사진 찍는 스타일: from-purple-500 to-pink-600
+스마트폰 습관: from-blue-500 to-indigo-600
 영화관 관람 스타일: from-indigo-400 to-purple-500
 자취 밥상 스타일: from-amber-400 to-orange-500
 음악 취향 MBTI: from-green-400 to-emerald-500
@@ -224,6 +225,7 @@ CREATE TABLE uploads (
 | **편의점 장바구니 MBTI** | ✅ 완료 | 2024-12 | 편의점 쇼핑 습관으로 보는 성격 테스트 | `/conbini-basket-mbti` |
 | **디저트 취향 MBTI** | ✅ 완료 | 2024-12 | 디저트 선택으로 보는 성격 테스트 | `/dessert-style` |
 | **사진 찍는 스타일 테스트** | ✅ 완료 | 2024-12 | 사진 촬영 방식으로 보는 성격 테스트 | `/photo-style` |
+| **스마트폰 습관 테스트** | ✅ 완료 | 2024-12 | 스마트폰 사용 패턴으로 보는 성격 테스트 | `/phone-style` |
 
 ### 4.2 개발 예정 테스트
 | 테스트명 | 상태 | 예정일 | 설명 | 우선순위 |

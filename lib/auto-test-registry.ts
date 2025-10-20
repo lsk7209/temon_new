@@ -1,7 +1,7 @@
 // 자동 퀴즈 등록 시스템
 // 새로운 퀴즈가 개발되면 자동으로 테스트 목록에 추가되는 시스템
 
-import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, Camera, type LucideIcon } from "lucide-react"
+import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, Camera, Smartphone, type LucideIcon } from "lucide-react"
 
 export interface Test {
   id: string
@@ -218,6 +218,21 @@ export const QUIZ_REGISTRATION_RULES: QuizRegistrationRule[] = [
       color: "from-purple-500 to-pink-600",
       category: "생활",
       tags: ["사진", "촬영", "스타일", "성격"]
+    },
+    optional: {
+      badge: "NEW",
+      new: true
+    }
+  },
+  {
+    idPattern: "phone-style",
+    autoGenerate: {
+      title: "📱 스마트폰 습관 테스트",
+      description: "스마트폰을 켜는 순간, 당신의 성격이 드러난다",
+      icon: Smartphone,
+      color: "from-blue-500 to-indigo-600",
+      category: "생활",
+      tags: ["스마트폰", "습관", "디지털", "성격"]
     },
     optional: {
       badge: "NEW",
