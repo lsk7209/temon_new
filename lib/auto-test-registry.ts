@@ -44,6 +44,125 @@ export interface QuizRegistrationRule {
 
 // 퀴즈 자동 등록 규칙 정의
 export const QUIZ_REGISTRATION_RULES: QuizRegistrationRule[] = [
+  // 완료된 퀴즈들
+  {
+    idPattern: "coffee-mbti",
+    autoGenerate: {
+      title: "☕ 커피 MBTI",
+      description: "당신의 커피 취향으로 알아보는 성격 유형",
+      icon: Coffee,
+      color: "from-amber-500 to-orange-600",
+      category: "음식",
+      tags: ["커피", "음료", "취향", "성격"]
+    },
+    optional: {
+      badge: "HOT",
+      popular: true
+    }
+  },
+  {
+    idPattern: "ramen-mbti",
+    autoGenerate: {
+      title: "🍜 라면 MBTI",
+      description: "라면 취향으로 알아보는 나의 성격",
+      icon: Soup,
+      color: "from-red-500 to-pink-600",
+      category: "음식",
+      tags: ["라면", "음식", "선택", "성격"]
+    },
+    optional: {
+      popular: true
+    }
+  },
+  {
+    idPattern: "pet-mbti",
+    autoGenerate: {
+      title: "🐾 반려동물 MBTI",
+      description: "반려동물 성향으로 알아보는 성격 테스트",
+      icon: Heart,
+      color: "from-pink-500 to-rose-600",
+      category: "관계",
+      tags: ["반려동물", "관계", "성격", "동물"]
+    }
+  },
+  {
+    idPattern: "study-mbti",
+    autoGenerate: {
+      title: "📚 공부 MBTI",
+      description: "나만의 공부 스타일 찾기",
+      icon: BookOpen,
+      color: "from-blue-500 to-cyan-600",
+      category: "학습",
+      tags: ["공부", "학습", "스타일", "성격"]
+    }
+  },
+  {
+    idPattern: "alarm-habit",
+    autoGenerate: {
+      title: "⏰ 알람 습관",
+      description: "아침 알람으로 보는 성격 유형",
+      icon: AlarmClock,
+      color: "from-purple-500 to-indigo-600",
+      category: "생활",
+      tags: ["알람", "습관", "생활", "패턴"]
+    }
+  },
+  {
+    idPattern: "ntrp-test",
+    autoGenerate: {
+      title: "🎾 NTRP 테스트",
+      description: "테니스 실력 레벨 측정",
+      icon: Trophy,
+      color: "from-green-500 to-emerald-600",
+      category: "스포츠",
+      tags: ["테니스", "스포츠", "실력", "레벨"]
+    }
+  },
+  {
+    idPattern: "kdrama-mbti",
+    autoGenerate: {
+      title: "🎬 K-드라마 클리셰",
+      description: "드라마 속 당신은 어떤 캐릭터?",
+      icon: Clapperboard,
+      color: "from-pink-500 to-purple-600",
+      category: "엔터테인먼트",
+      tags: ["드라마", "캐릭터", "K-드라마", "성격"]
+    },
+    optional: {
+      badge: "NEW",
+      new: true
+    }
+  },
+  {
+    idPattern: "snowwhite-mbti",
+    autoGenerate: {
+      title: "🍎 백설공주 에겐테토",
+      description: "백설공주로 알아보는 에겐 vs 테토 성향",
+      icon: Heart,
+      color: "from-pink-500 to-purple-600",
+      category: "동화",
+      tags: ["백설공주", "에겐", "테토", "성격"]
+    },
+    optional: {
+      badge: "NEW",
+      new: true
+    }
+  },
+  {
+    idPattern: "kpop-idol",
+    autoGenerate: {
+      title: "🎤 K-팝 아이돌 포지션",
+      description: "아이돌 그룹에서 내 포지션은?",
+      icon: Trophy,
+      color: "from-purple-500 to-pink-600",
+      category: "엔터테인먼트",
+      tags: ["K-팝", "아이돌", "포지션", "성격"]
+    },
+    optional: {
+      badge: "NEW",
+      new: true
+    }
+  },
   {
     idPattern: "travel-pack-mbti",
     autoGenerate: {
