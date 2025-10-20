@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
 import AnalyticsProvider from "@/components/analytics-provider"
 import Script from "next/script"
 import { Suspense } from "react"
@@ -56,8 +57,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <Suspense fallback={null}>
           <AnalyticsProvider>
-            <Header />
-            <main className="min-h-screen">{children}</main>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
           </AnalyticsProvider>
         </Suspense>
       </body>
