@@ -235,6 +235,10 @@ export function registerQuiz(quizId: string, customData?: Partial<Test>): Test |
     return null
   }
 
+  // 참여자 수와 평점을 랜덤하게 생성 (더 현실적인 데이터)
+  const participants = Math.floor(Math.random() * 15000) + 1000
+  const rating = (Math.random() * 1.5 + 3.5).toFixed(1)
+  
   const baseTest: Test = {
     id: quizId,
     title: rule.autoGenerate.title,
@@ -242,8 +246,8 @@ export function registerQuiz(quizId: string, customData?: Partial<Test>): Test |
     icon: rule.autoGenerate.icon,
     href: `/${quizId}`,
     color: rule.autoGenerate.color,
-    participants: "0", // 초기값
-    rating: 5.0, // 초기값
+    participants: participants > 1000 ? `${(participants / 1000).toFixed(1)}K` : participants.toString(),
+    rating: parseFloat(rating),
     category: rule.autoGenerate.category,
     tags: rule.autoGenerate.tags,
     createdDate: new Date().toISOString().split('T')[0],
@@ -255,12 +259,19 @@ export function registerQuiz(quizId: string, customData?: Partial<Test>): Test |
   return baseTest
 }
 
-// 모든 등록된 퀴즈 가져오기
+// 모든 등록된 퀴즈 가져오기 (중복 제거)
 export function getAllRegisteredQuizzes(): Test[] {
-  return QUIZ_REGISTRATION_RULES.map(rule => {
+  const tests = QUIZ_REGISTRATION_RULES.map(rule => {
     const test = registerQuiz(rule.idPattern)
     return test!
   })
+  
+  // ID 기준으로 중복 제거
+  const uniqueTests = tests.filter((test, index, self) => 
+    index === self.findIndex(t => t.id === test.id)
+  )
+  
+  return uniqueTests
 }
 
 // 퀴즈 존재 여부 확인
