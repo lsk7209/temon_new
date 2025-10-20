@@ -24,7 +24,23 @@ export async function GET(req: NextRequest) {
       'gradient-pink': 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
       'gradient-orange': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
       'gradient-green': 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-      'gradient-gray': 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)'
+      'gradient-gray': 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)',
+      'warm-gradient': 'linear-gradient(135deg, #FFB86C 0%, #FF8A80 100%)',
+      'candy-pop': 'linear-gradient(135deg, #FF7EB6 0%, #FF6B9D 100%)',
+      'steel-blue': 'linear-gradient(135deg, #4B6BFB 0%, #3B5BDB 100%)',
+      'neon-dark': 'linear-gradient(135deg, #8A8AFF 0%, #6B6BFF 100%)',
+      'soft-pink': 'linear-gradient(135deg, #FF9EC1 0%, #FF8AB3 100%)',
+      'sunset-glow': 'linear-gradient(135deg, #FFC65A 0%, #FFB84D 100%)',
+      'clean-white': 'linear-gradient(135deg, #5AC8FA 0%, #4AB8E9 100%)',
+      'lime-flash': 'linear-gradient(135deg, #9AE66E 0%, #8AE55C 100%)',
+      'fog-lilac': 'linear-gradient(135deg, #C1B2FF 0%, #B3A2FF 100%)',
+      'dreamy-violet': 'linear-gradient(135deg, #9D7AF0 0%, #8E6CEF 100%)',
+      'graphite': 'linear-gradient(135deg, #7B8794 0%, #6B7B8C 100%)',
+      'ice-blue': 'linear-gradient(135deg, #7CD4FD 0%, #6CC4ED 100%)',
+      'cream': 'linear-gradient(135deg, #F5CBA7 0%, #F5BB97 100%)',
+      'sage': 'linear-gradient(135deg, #9AD0B2 0%, #8AC0A2 100%)',
+      'navy': 'linear-gradient(135deg, #2F3E46 0%, #1F2E36 100%)',
+      'charcoal': 'linear-gradient(135deg, #4E4E50 0%, #3E3E40 100%)'
     }
 
     const backgroundStyle = backgroundGradients[bg as keyof typeof backgroundGradients] || backgroundGradients['gradient-blue']

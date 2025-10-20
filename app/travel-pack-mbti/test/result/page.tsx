@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { getResultByType, generateStructuredData } from "@/lib/seo"
+import { getResultByType, getCompanionSuggestion, generateStructuredData } from "@/data/travelPackConfig"
 import { trackTestComplete, trackResultView, trackShare, trackClick } from "@/lib/analytics"
 import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
@@ -24,6 +24,7 @@ import {
 
 export default function TravelPackResultPage() {
   const [result, setResult] = useState<any>(null)
+  const [companions, setCompanions] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [shareText, setShareText] = useState("")
   const [showCopied, setShowCopied] = useState(false)
@@ -36,7 +37,8 @@ export default function TravelPackResultPage() {
       const resultData = getResultByType(type)
       if (resultData) {
         setResult(resultData)
-        setShareText(`나는 ${resultData.title}(${resultData.type})! 너는 여행 전날 캐리어 다 쌌어? /travel-pack-mbti/test/result?type=${resultData.type}`)
+        setShareText(resultData.shareText)
+        setCompanions(getCompanionSuggestion(resultData.type))
         
         // 결과 페이지 조회 추적
         trackResultView("travel-pack-mbti", type, window.location.pathname)
@@ -132,13 +134,13 @@ export default function TravelPackResultPage() {
       <div className="max-w-4xl mx-auto">
         {/* 결과 헤더 */}
         <Card className="mb-8 overflow-hidden">
-          <div className={`bg-gradient-to-r ${result.color} p-8 text-white text-center`}>
+          <div className={`bg-gradient-to-r ${result.color || 'from-blue-500 to-purple-600'} p-8 text-white text-center`}>
             <div className="text-6xl mb-4">{result.emoji}</div>
             <h1 className="text-3xl md:text-4xl font-bold mb-2">{result.title}</h1>
             <Badge className="bg-white/20 text-white border-white/30 text-lg px-4 py-2">
               {result.type}
             </Badge>
-            <p className="text-xl mt-4 opacity-90">{result.summary}</p>
+            <p className="text-xl mt-4 opacity-90">{result.tagline}</p>
           </div>
           
           {/* OG 이미지 미리보기 */}
@@ -168,7 +170,7 @@ export default function TravelPackResultPage() {
             </div>
             <div className="border rounded-lg overflow-hidden">
               <img
-                src={`/api/og?type=${result.type}&title=${encodeURIComponent(result.title)}&summary=${encodeURIComponent(result.summary)}&emoji=${result.emoji}`}
+                src={`/api/og?type=${result.type}&title=${encodeURIComponent(result.title)}&summary=${encodeURIComponent(result.tagline)}&emoji=${result.emoji}&bg=${result.og.bg}`}
                 alt={`${result.title} 결과 이미지`}
                 className="w-full h-auto"
                 style={{ aspectRatio: '1200/630' }}
@@ -186,9 +188,13 @@ export default function TravelPackResultPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700 leading-relaxed text-lg">
-              {result.description}
-            </p>
+            <div className="space-y-3">
+              {result.summary.map((line: string, index: number) => (
+                <p key={index} className="text-gray-700 leading-relaxed">
+                  {line}
+                </p>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
@@ -197,16 +203,15 @@ export default function TravelPackResultPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-500" />
-              짐 싸는 습관 특징
+              나만의 여행 키워드
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-wrap gap-2">
               {result.traits.map((trait: string, index: number) => (
-                <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">{trait}</span>
-                </div>
+                <Badge key={index} variant="secondary" className="text-sm px-3 py-1">
+                  {trait}
+                </Badge>
               ))}
             </div>
           </CardContent>
@@ -221,11 +226,18 @@ export default function TravelPackResultPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-3">
-              {result.partners.map((partner: string, index: number) => (
-                <Badge key={index} variant="secondary" className="text-lg px-4 py-2">
-                  {partner}
-                </Badge>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {companions.map((companion, index) => (
+                <div key={index} className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-2xl">{companion.emoji}</span>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{companion.title}</h4>
+                      <Badge variant="outline" className="text-xs">{companion.type}</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">{companion.reason}</p>
+                </div>
               ))}
             </div>
             <p className="text-gray-600 mt-4 text-sm">
@@ -239,17 +251,89 @@ export default function TravelPackResultPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lightbulb className="h-5 w-5 text-yellow-500" />
-              나만의 여행 준비 팁
+              나만의 짐싸기 팁
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {result.tips.map((tip: string, index: number) => (
+              {result.packingTips.map((tip: string, index: number) => (
                 <div key={index} className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
                   <Lightbulb className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
                   <span className="text-gray-700">{tip}</span>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 핵심 체크리스트 */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              핵심 챙김템 TOP 3
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {result.checklistTop3.map((item: string, index: number) => (
+                <div key={index} className="p-4 bg-green-50 rounded-lg text-center">
+                  <div className="text-2xl font-bold text-green-600 mb-2">#{index + 1}</div>
+                  <p className="text-gray-700 font-medium">{item}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 추천 여행지 */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-blue-500" />
+              나에게 맞는 여행지
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  🇰🇷 국내 여행
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {result.idealDestinations.domestic.map((destination: string, index: number) => (
+                    <Badge key={index} variant="outline" className="text-sm">
+                      {destination}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  🌏 아시아 여행
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {result.idealDestinations.asia.map((destination: string, index: number) => (
+                    <Badge key={index} variant="outline" className="text-sm">
+                      {destination}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  🌍 글로벌 여행
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {result.idealDestinations.global.map((destination: string, index: number) => (
+                    <Badge key={index} variant="outline" className="text-sm">
+                      {destination}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
