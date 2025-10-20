@@ -7,28 +7,12 @@ import Footer from "@/components/footer"
 import AnalyticsProvider from "@/components/analytics-provider"
 import Script from "next/script"
 import { Suspense } from "react"
+import { defaultMetadata, generateStructuredData } from "@/lib/seo"
+import { ALL_TESTS } from "@/lib/tests-config"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata: Metadata = {
-  title: "테몬 MBTI - 나만의 성격 유형 테스트",
-  description: "커피, 라면, 반려동물, 공부 습관 등 다양한 주제로 알아보는 재미있는 MBTI 테스트",
-  keywords: "MBTI, 성격테스트, 커피MBTI, 라면MBTI, 반려동물MBTI, 공부MBTI, 알람습관, NTRP테스트",
-  metadataBase: new URL("https://www.temon.kr"),
-  openGraph: {
-    title: "테몬 MBTI - 나만의 성격 유형 테스트",
-    description: "커피, 라면, 반려동물, 공부 습관 등 다양한 주제로 알아보는 재미있는 MBTI 테스트",
-    url: "https://www.temon.kr",
-    siteName: "테몬 MBTI",
-    locale: "ko_KR",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-    generator: 'v0.app'
-}
+export const metadata: Metadata = defaultMetadata
 
 export default function RootLayout({
   children,
@@ -55,6 +39,14 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
+        {/* 구조화된 데이터 */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateStructuredData('website', { tests: ALL_TESTS }))
+          }}
+        />
+        
         <Suspense fallback={null}>
           <AnalyticsProvider>
             <div className="flex flex-col min-h-screen">
