@@ -164,7 +164,7 @@ export default function CoffeeMBTITest() {
   const currentQ = questions[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-brown-50 dark:from-amber-950 dark:via-orange-950 dark:to-brown-950">
+    <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-brown-50 dark:from-amber-950 dark:via-orange-950 dark:to-brown-950">
       {/* Progress Bar */}
       <div className="container max-w-2xl mx-auto px-4 py-4">
         <div className="flex items-center space-x-4">

@@ -41,7 +41,7 @@ export default function HomePage() {
   const hasMoreTests = ALL_TESTS.length > 9
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-pink-50 to-cyan-50">
+    <div className="bg-gradient-to-br from-violet-50 via-pink-50 to-cyan-50">
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-16 px-4">
         <div className="max-w-7xl mx-auto text-center relative z-10">

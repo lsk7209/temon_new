@@ -227,7 +227,7 @@ function ResultContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-brown-50 dark:from-amber-950 dark:via-orange-950 dark:to-brown-950">
+    <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-brown-50 dark:from-amber-950 dark:via-orange-950 dark:to-brown-950">
       {/* Main Result */}
       <main className="container max-w-4xl mx-auto px-4 py-8">
         {/* Character Card */}
