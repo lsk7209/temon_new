@@ -40,7 +40,6 @@ interface QuizResultTemplateProps {
   // 기본 정보
   testId: string
   testName: string
-  getResult: (type: string) => QuizResult | null
   
   // 스타일링
   gradientFrom: string
@@ -75,7 +74,6 @@ interface QuizResultTemplateProps {
 export default function QuizResultTemplate({
   testId,
   testName,
-  getResult,
   gradientFrom,
   gradientTo,
   sections = {
@@ -99,7 +97,26 @@ export default function QuizResultTemplate({
   useEffect(() => {
     const type = searchParams.get('type')
     if (type) {
-      const resultData = getResult(type)
+      // 각 테스트별로 결과를 가져오는 로직
+      let resultData: QuizResult | null = null
+      
+      if (testId === 'phone-style') {
+        const { getPhoneResult } = require('@/data/phoneResults')
+        resultData = getPhoneResult(type)
+      } else if (testId === 'photo-style') {
+        const { getPhotoResult } = require('@/data/photoResults')
+        resultData = getPhotoResult(type)
+      } else if (testId === 'dessert-style') {
+        const { getDessertResult } = require('@/data/dessertResults')
+        resultData = getDessertResult(type)
+      } else if (testId === 'conbini') {
+        const { getConbiniResult } = require('@/data/conbiniResults')
+        resultData = getConbiniResult(type)
+      } else if (testId === 'travel-pack-mbti') {
+        const { getResultByType } = require('@/data/travelPackConfig')
+        resultData = getResultByType(type)
+      }
+      
       if (resultData) {
         setResult(resultData)
         setShareText(resultData.shareText)
@@ -112,7 +129,7 @@ export default function QuizResultTemplate({
     } else {
       router.push(`/${testId}`)
     }
-  }, [searchParams, router, testId, getResult])
+  }, [searchParams, router, testId])
 
   const handleShare = (platform: string) => {
     const url = window.location.href

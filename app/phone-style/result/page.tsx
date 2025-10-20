@@ -1,5 +1,4 @@
 import QuizResultTemplate from "@/components/quiz/QuizResultTemplate"
-import { getPhoneResult } from "@/data/phoneResults"
 import { Smartphone, Lightbulb, MapPin } from "lucide-react"
 
 export default function PhoneResultPage() {
@@ -7,7 +6,6 @@ export default function PhoneResultPage() {
     <QuizResultTemplate
       testId="phone-style"
       testName="스마트폰 습관"
-      getResult={getPhoneResult}
       gradientFrom="from-blue-50"
       gradientTo="via-indigo-50"
       sections={{
@@ -21,12 +19,18 @@ export default function PhoneResultPage() {
           icon: <Smartphone className="h-5 w-5 text-blue-500" />,
           content: (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {getPhoneResult("ENFP")?.phoneHabits?.map((habit: string, index: number) => (
-                <div key={index} className="p-4 bg-blue-50 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-blue-600 mb-2">#{index + 1}</div>
-                  <p className="text-gray-700 font-medium">{habit}</p>
-                </div>
-              )) || []}
+              <div className="p-4 bg-blue-50 rounded-lg text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-2">#1</div>
+                <p className="text-gray-700 font-medium">새 앱 즉시 설치</p>
+              </div>
+              <div className="p-4 bg-blue-50 rounded-lg text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-2">#2</div>
+                <p className="text-gray-700 font-medium">SNS 적극 활용</p>
+              </div>
+              <div className="p-4 bg-blue-50 rounded-lg text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-2">#3</div>
+                <p className="text-gray-700 font-medium">창의적 콘텐츠 제작</p>
+              </div>
             </div>
           )
         },
@@ -35,12 +39,18 @@ export default function PhoneResultPage() {
           icon: <MapPin className="h-5 w-5 text-purple-500" />,
           content: (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {getPhoneResult("ENFP")?.recommendedApps?.map((app: string, index: number) => (
-                <div key={index} className="p-4 bg-purple-50 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-purple-600 mb-2">📱</div>
-                  <p className="text-gray-700 font-medium">{app}</p>
-                </div>
-              )) || []}
+              <div className="p-4 bg-purple-50 rounded-lg text-center">
+                <div className="text-2xl font-bold text-purple-600 mb-2">📱</div>
+                <p className="text-gray-700 font-medium">틱톡</p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-lg text-center">
+                <div className="text-2xl font-bold text-purple-600 mb-2">📱</div>
+                <p className="text-gray-700 font-medium">인스타그램</p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-lg text-center">
+                <div className="text-2xl font-bold text-purple-600 mb-2">📱</div>
+                <p className="text-gray-700 font-medium">스냅챗</p>
+              </div>
             </div>
           )
         }

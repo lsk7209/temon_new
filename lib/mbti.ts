@@ -46,4 +46,18 @@ function pick(a: number, b: number, pref: readonly string[]) {
   return pref[0];
 }
 
+// 퀴즈 템플릿에서 사용할 calculateMBTI 함수
+export function calculateMBTI(answers: string[]): MBTI {
+  const score = initScore();
+  
+  // 답변 배열에서 각 MBTI 태그의 점수를 계산
+  answers.forEach(tag => {
+    if (tag in score) {
+      score[tag as keyof AxisScore]++;
+    }
+  });
+  
+  return decideType(score);
+}
+
 
