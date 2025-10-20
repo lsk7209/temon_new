@@ -598,11 +598,151 @@ jobs:
 - [Tailwind CSS 공식 문서](https://tailwindcss.com/docs)
 - [shadcn/ui 컴포넌트](https://ui.shadcn.com/)
 
+## 15. 퀴즈 템플릿 시스템
+
+### 15.1 개요
+테몬 MBTI 플랫폼의 퀴즈 템플릿 시스템은 일관된 사용자 경험을 제공하고 개발 효율성을 높이기 위해 설계되었습니다.
+
+### 15.2 템플릿 구조
+
+#### 15.2.1 QuizIntroTemplate (인트로 페이지)
+- **목적**: 퀴즈 소개 및 시작 페이지
+- **기능**: 
+  - 일관된 디자인과 사용자 경험 제공
+  - SEO 최적화된 구조
+  - 퀴즈 정보 표시 (시간, 문항 수, 특징 등)
+  - 관련 테스트 추천
+
+#### 15.2.2 QuizTestTemplate (테스트 페이지)
+- **목적**: 질문과 답변을 표시하는 페이지
+- **기능**:
+  - 자동 진행 기능 지원
+  - 애니메이션과 시각적 피드백 제공
+  - 진행률 표시
+  - OG 이미지 표시
+
+#### 15.2.3 QuizResultTemplate (결과 페이지)
+- **목적**: 테스트 결과를 표시하는 페이지
+- **기능**:
+  - 공유 기능 및 관련 테스트 추천
+  - 구조화된 데이터 지원
+  - 커스텀 섹션 지원
+  - 텍스트 가독성 최적화
+
+### 15.3 데이터 구조
+
+#### 15.3.1 QuizQuestion
+```typescript
+interface QuizQuestion {
+  id: number
+  title: string
+  options: {
+    label: string
+    tags: string[]
+  }[]
+}
+```
+
+#### 15.3.2 QuizResult
+```typescript
+interface QuizResult {
+  type: string
+  emoji: string
+  title: string
+  tagline: string
+  summary: string[]
+  traits: string[]
+  color?: string
+  og: {
+    bg: string
+    icon: string
+  }
+  shareText: string
+  hashtags: string[]
+}
+```
+
+### 15.4 사용 방법
+
+#### 15.4.1 기본 설정
+```typescript
+import { createQuizConfig } from "@/lib/quiz-templates"
+
+const config = createQuizConfig({
+  id: 'my-quiz',
+  name: '내 퀴즈',
+  description: '재미있는 테스트입니다',
+  emoji: '🎯',
+  category: '성격',
+  estimatedTime: '5분',
+  questionCount: 12,
+  gradientFrom: 'from-blue-500',
+  gradientTo: 'to-indigo-600',
+  accentColor: 'blue'
+})
+```
+
+#### 15.4.2 페이지 생성
+1. **인트로 페이지**: `QuizIntroTemplate` 사용
+2. **테스트 페이지**: `QuizTestTemplate` 사용
+3. **결과 페이지**: `QuizResultTemplate` 사용
+
+### 15.5 스타일링 가이드
+
+#### 15.5.1 그라디언트 색상
+- **파란색 계열**: `from-blue-500` to `to-indigo-600`
+- **보라색 계열**: `from-purple-500` to `to-pink-600`
+- **오렌지 계열**: `from-orange-500` to `to-red-500`
+- **핑크 계열**: `from-pink-500` to `to-purple-600`
+
+#### 15.5.2 이모지 선택
+- 퀴즈의 주제와 관련된 이모지 선택
+- 사용자가 직관적으로 이해할 수 있는 것
+- 일관성 있는 스타일 유지
+
+### 15.6 베스트 프랙티스
+
+#### 15.6.1 질문 설계
+- 질문은 8-16개 정도가 적당
+- 각 질문마다 2-4개의 옵션 제공
+- MBTI 태그는 E/I, S/N, T/F, J/P 사용
+
+#### 15.6.2 결과 작성
+- 결과 설명은 3-5줄로 구성
+- 특징은 5-8개 정도가 적당
+- 공유 텍스트는 재미있고 공유하고 싶게 작성
+
+#### 15.6.3 성능 최적화
+- 이미지 최적화
+- 애니메이션 성능 고려
+- SEO 최적화
+
+### 15.7 마이그레이션 가이드
+
+기존 퀴즈를 템플릿으로 마이그레이션하는 방법:
+
+1. **기존 코드 분석**: 현재 구조 파악, 공통 패턴 식별
+2. **데이터 구조 변환**: 질문/결과 데이터를 표준 형태로 변환
+3. **템플릿 적용**: 각 페이지를 해당 템플릿으로 교체
+4. **테스트 및 검증**: 모든 기능이 정상 작동하는지 확인
+
+### 15.8 확장 가능성
+
+- **새로운 템플릿 추가**: 특별한 기능이 필요한 경우
+- **커스텀 섹션 확장**: 더 많은 섹션 타입 추가
+- **애니메이션 커스터마이징**: 다양한 애니메이션 옵션 제공
+- **다국어 지원**: 국제화 기능 추가
+
+### 15.9 참고 문서
+- 상세한 사용 가이드: `docs/QUIZ_TEMPLATE_GUIDE.md`
+- 예제 프로젝트: `app/phone-style/` 디렉토리
+
 ### 14.3 변경 이력
 | 버전 | 날짜 | 변경 내용 | 작성자 |
 |------|------|-----------|--------|
 | 1.0.0 | 2024-12 | 초기 PRD 작성 | 개발팀 |
 | 2.0.0 | 2024-12 | Vercel/GitHub/Supabase 통합 | 개발팀 |
+| 3.0.0 | 2024-12 | 퀴즈 템플릿 시스템 구축 | 개발팀 |
 
 ---
 
