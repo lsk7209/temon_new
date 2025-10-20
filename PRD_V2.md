@@ -102,9 +102,59 @@ components/
 interface TestStructure {
   questions: 12; // 고정
   choices: 2; // A, B 고정
-  autoAdvance: 0.5; // 초
+  autoAdvance: 0.5; // 초 (답변 클릭 시 자동으로 다음으로 이동)
   mbtiDimensions: ['E/I', 'S/N', 'T/F', 'J/P'];
 }
+```
+
+### 4.1.1 퀴즈 개발 필수 규칙
+```typescript
+// ✅ 필수 구현 사항
+const QUIZ_DEVELOPMENT_RULES = {
+  // 1. 자동 진행 시스템
+  autoAdvance: {
+    enabled: true,
+    delay: 500, // 0.5초 후 자동 진행
+    animation: "fade-out then fade-in"
+  },
+  
+  // 2. Analytics 필수 이벤트
+  requiredEvents: [
+    'trackTestStart',      // 테스트 시작
+    'trackQuestionAnswer', // 각 질문 답변
+    'trackTestComplete',   // 테스트 완료
+    'trackResultView',     // 결과 조회
+    'trackShare'           // 결과 공유
+  ],
+  
+  // 3. SEO/AEO/GEO 최적화
+  seoRequirements: {
+    title: "테스트명 | 테몬 MBTI",
+    description: "한 줄 설명 + 2분 완성 + 16유형 결과",
+    keywords: "MBTI, 성격테스트, [테마]",
+    ogImage: "/api/og?type={result}&title={title}&emoji={emoji}"
+  },
+  
+  // 4. 파일 구조 표준
+  fileStructure: {
+    data: "data/{testName}Config.ts",     // 질문/결과 데이터
+    pages: "app/{testName}/",             // 라우팅
+    components: "components/{testName}/", // 테스트별 컴포넌트
+    lib: "lib/mbti.ts"                    // 공통 MBTI 로직
+  },
+  
+  // 5. 개발 완료 체크리스트
+  completionChecklist: [
+    "12문항 질문 데이터 구현",
+    "16유형 결과 데이터 구현", 
+    "인트로/테스트/결과 페이지 구현",
+    "Analytics 이벤트 추가",
+    "SEO 메타데이터 설정",
+    "OG 이미지 생성",
+    "공유 기능 구현",
+    "PRD 문서 업데이트"
+  ]
+};
 ```
 
 ### 4.2 현재 구현된 테스트들
@@ -119,9 +169,31 @@ const IMPLEMENTED_TESTS = [
   'kdrama-mbti',      // 🎬 K-드라마 클리셰
   'snowwhite-mbti',   // 🍎 백설공주 에겐테토
   'kpop-idol',        // 🎤 K-팝 아이돌 포지션
-  'travel-pack-mbti', // 🎒 여행 짐 싸는 스타일 테스트
-  'conbini-basket'    // 🛍️ 편의점 장바구니 성격 테스트
+  'travel-pack-mbti', // 🎒 여행 짐 싸는 스타일 테스트 (완료)
+  'conbini-basket'    // 🛍️ 편의점 장바구니 성격 테스트 (데이터만 완료)
 ];
+```
+
+### 4.2.1 개발 상태 추적
+```typescript
+const DEVELOPMENT_STATUS = {
+  // 완료된 테스트 (페이지 + 데이터)
+  completed: [
+    'travel-pack-mbti' // 🎒 여행 짐싸기 - 전체 구현 완료
+  ],
+  
+  // 데이터만 완료 (페이지 구현 필요)
+  dataOnly: [
+    'conbini-basket' // 🛍️ 편의점 장바구니 - 데이터 구조만 완료
+  ],
+  
+  // 개발 예정
+  planned: [
+    'music-taste-mbti',    // 🎵 음악 취향 MBTI
+    'fashion-style-mbti',  // 👗 패션 스타일 MBTI
+    'food-preference-mbti' // 🍽️ 음식 취향 MBTI
+  ]
+};
 ```
 
 ### 4.3 테스트 페이지 구조
@@ -352,6 +424,8 @@ const PERFORMANCE_OPTIMIZATIONS = {
 3. Analytics 이벤트 필수 추가
 4. 반응형 디자인 우선
 5. 성능 최적화 고려
+6. 자동 진행 시스템 구현 (0.5초 딜레이)
+7. 퀴즈 완료 시 PRD 문서 자동 업데이트
 
 // ❌ 금지사항
 1. min-h-screen 개별 페이지 사용 금지
@@ -359,6 +433,61 @@ const PERFORMANCE_OPTIMIZATIONS = {
 3. AdSense 중복 코드 사용 금지
 4. Analytics 이벤트 누락 금지
 5. 타입 정의 누락 금지
+6. 수동 페이지 전환 (자동 진행 필수)
+7. PRD 문서 업데이트 누락 금지
+```
+
+### 12.1.1 퀴즈 개발 워크플로우
+```typescript
+const QUIZ_DEVELOPMENT_WORKFLOW = {
+  // 1단계: 데이터 구조 설계
+  step1: {
+    task: "질문/결과 데이터 구조 설계",
+    files: ["data/{testName}Config.ts"],
+    checklist: [
+      "12문항 질문 정의",
+      "16유형 결과 데이터",
+      "MBTI 태깅 시스템",
+      "SEO/AEO/GEO 키워드"
+    ]
+  },
+  
+  // 2단계: 페이지 구현
+  step2: {
+    task: "라우팅 및 페이지 구현",
+    files: ["app/{testName}/page.tsx", "app/{testName}/test/page.tsx", "app/{testName}/test/result/page.tsx"],
+    checklist: [
+      "인트로 페이지 (SEO 최적화)",
+      "테스트 진행 페이지 (자동 진행)",
+      "결과 페이지 (공유 기능)",
+      "Analytics 이벤트 추가"
+    ]
+  },
+  
+  // 3단계: 컴포넌트 구현
+  step3: {
+    task: "재사용 가능한 컴포넌트 구현",
+    files: ["components/{testName}/"],
+    checklist: [
+      "ProgressBar 컴포넌트",
+      "ChoiceCard 컴포넌트", 
+      "ShareButtons 컴포넌트",
+      "ResultBlocks 컴포넌트"
+    ]
+  },
+  
+  // 4단계: 자동 업데이트
+  step4: {
+    task: "PRD 문서 자동 업데이트",
+    files: ["PRD_V2.md"],
+    actions: [
+      "IMPLEMENTED_TESTS 배열에 추가",
+      "DEVELOPMENT_STATUS 업데이트",
+      "컬러 시스템 추가",
+      "로드맵 업데이트"
+    ]
+  }
+};
 ```
 
 ### 12.2 파일 구조 표준
@@ -382,25 +511,65 @@ app/
 
 ### 12.3 컴포넌트 개발 규칙
 ```typescript
-// 컴포넌트 템플릿
+// 퀴즈 테스트 페이지 템플릿
 "use client"
 
-import { useState } from "react"
-import { trackClick } from "@/lib/analytics"
+import { useState, useEffect } from "react"
+import { trackTestStart, trackQuestionAnswer, trackTestComplete } from "@/lib/analytics"
+import { useRouter } from "next/navigation"
 
-interface ComponentProps {
-  // 타입 정의 필수
+interface QuizTestProps {
+  questions: Question[]
+  onComplete: (result: string) => void
 }
 
-export default function Component({ ...props }: ComponentProps) {
-  const handleAction = () => {
-    trackClick("action_name", window.location.pathname)
-    // 액션 로직
+export default function QuizTest({ questions, onComplete }: QuizTestProps) {
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [answers, setAnswers] = useState<string[]>([])
+  const router = useRouter()
+
+  // 자동 진행 시스템 (0.5초 딜레이)
+  const handleAnswer = (answer: string) => {
+    const newAnswers = [...answers, answer]
+    setAnswers(newAnswers)
+    
+    // Analytics 이벤트
+    trackQuestionAnswer(currentQuestion + 1, answer, window.location.pathname)
+    
+    // 자동 진행
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1)
+      } else {
+        // 테스트 완료
+        const result = calculateMBTI(newAnswers)
+        trackTestComplete("test-name", result, window.location.pathname)
+        router.push(`/test-name/test/result?type=${result}`)
+      }
+    }, 500) // 0.5초 딜레이
   }
 
   return (
-    // JSX
+    // JSX with fade animation
   )
+}
+```
+
+### 12.3.1 자동 진행 애니메이션
+```css
+/* 자동 진행 애니메이션 */
+.question-transition {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.question-fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.question-fade-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 ```
 
@@ -415,6 +584,10 @@ export default function Component({ ...props }: ComponentProps) {
 - [ ] 성능 최적화 고려
 - [ ] 접근성 준수
 - [ ] 보안 취약점 없음
+- [ ] 자동 진행 시스템 구현 (0.5초 딜레이)
+- [ ] PRD 문서 업데이트 완료
+- [ ] SEO/AEO/GEO 최적화
+- [ ] OG 이미지 생성
 
 ### 13.2 테스트 전략
 ```typescript

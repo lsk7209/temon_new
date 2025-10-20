@@ -9,7 +9,8 @@
     "start": "next start",
     "deploy": "node scripts/deploy.js",
     "auto-deploy": "bash scripts/auto-deploy.sh",
-    "auto-deploy:win": "scripts\\auto-deploy.bat"
+    "auto-deploy:win": "scripts\\auto-deploy.bat",
+    "update-prd": "node scripts/update-prd.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
