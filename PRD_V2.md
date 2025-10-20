@@ -78,6 +78,8 @@ app/layout.tsx:
 공부 MBTI: from-blue-50 to-indigo-50
 알람 습관: from-cyan-50 to-blue-50
 NTRP 테스트: from-green-50 to-emerald-50
+여행 짐싸기: from-blue-50 via-indigo-50 to-purple-50
+편의점 장바구니: from-yellow-50 via-orange-50 to-red-50
 ```
 
 ### 3.3 컴포넌트 구조
@@ -116,7 +118,9 @@ const IMPLEMENTED_TESTS = [
   'ntrp-test',        // 🎾 NTRP 테스트
   'kdrama-mbti',      // 🎬 K-드라마 클리셰
   'snowwhite-mbti',   // 🍎 백설공주 에겐테토
-  'kpop-idol'         // 🎤 K-팝 아이돌 포지션
+  'kpop-idol',        // 🎤 K-팝 아이돌 포지션
+  'travel-pack-mbti', // 🎒 여행 짐 싸는 스타일 테스트
+  'conbini-basket'    // 🛍️ 편의점 장바구니 성격 테스트
 ];
 ```
 
@@ -318,8 +322,11 @@ const PERFORMANCE_OPTIMIZATIONS = {
 - [x] Analytics 시스템 구축
 - [x] 관리자 시스템 구현
 - [x] 배포 파이프라인 구축
+- [x] 여행 짐싸기 테스트 구현
+- [x] 편의점 장바구니 테스트 데이터 구조 구현
 
 ### 11.2 Phase 2: 기능 확장 (진행 중)
+- [ ] 편의점 장바구니 테스트 페이지 구현
 - [ ] 사용자 인증 시스템
 - [ ] 파일 업로드 시스템
 - [ ] 고급 Analytics 대시보드
