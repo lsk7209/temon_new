@@ -180,7 +180,7 @@ export const QUIZ_REGISTRATION_RULES: QuizRegistrationRule[] = [
     }
   },
   {
-    idPattern: "conbini-basket-mbti",
+    idPattern: "conbini",
     autoGenerate: {
       title: "🛒 편의점 장바구니 MBTI",
       description: "편의점 쇼핑 습관으로 보는 성격 테스트",
