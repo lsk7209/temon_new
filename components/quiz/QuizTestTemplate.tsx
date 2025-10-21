@@ -99,7 +99,7 @@ export default function QuizTestTemplate({
 
   const currentQuestion = loadedQuestions[currentQuestionIndex]
   const totalQuestions = loadedQuestions.length
-  const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100
+  const progress = totalQuestions > 0 ? ((currentQuestionIndex + 1) / totalQuestions) * 100 : 0
 
   useEffect(() => {
     if (totalQuestions > 0) {
@@ -108,7 +108,7 @@ export default function QuizTestTemplate({
   }, [currentQuestionIndex, totalQuestions, testId])
 
   // 질문이 로드되지 않았으면 로딩 표시
-  if (loadedQuestions.length === 0) {
+  if (loadedQuestions.length === 0 || !currentQuestion) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="text-center">
@@ -165,7 +165,7 @@ export default function QuizTestTemplate({
         }, 1000)
       }
     }, DEFAULT_AUTO_ADVANCE_DELAY)
-  }, [currentQuestionIndex, answers, currentQuestion, testId, totalQuestions, router, isAnimating])
+  }, [currentQuestionIndex, answers, currentQuestion, testId, totalQuestions, router, isAnimating, DEFAULT_AUTO_ADVANCE_DELAY])
 
   const questionVariants = {
     enter: { opacity: 0, x: 100 },
