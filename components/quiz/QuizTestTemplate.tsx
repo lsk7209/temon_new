@@ -26,6 +26,7 @@ export default function QuizTestTemplate({
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [loadedQuestions, setLoadedQuestions] = useState<any[]>([])
+  const [isQuestionsLoaded, setIsQuestionsLoaded] = useState(false)
 
   // testId에 따라 동적으로 질문 데이터 로드
   useEffect(() => {
@@ -88,9 +89,11 @@ export default function QuizTestTemplate({
         
         console.log('Final questions data:', questionsData)
         setLoadedQuestions(questionsData)
+        setIsQuestionsLoaded(true)
       } catch (error) {
         console.error('Error loading questions:', error)
         setLoadedQuestions(questions)
+        setIsQuestionsLoaded(true)
       }
     }
     
@@ -108,7 +111,7 @@ export default function QuizTestTemplate({
   }, [currentQuestionIndex, totalQuestions, testId])
 
   // 질문이 로드되지 않았으면 로딩 표시
-  if (loadedQuestions.length === 0 || !currentQuestion) {
+  if (!isQuestionsLoaded || loadedQuestions.length === 0 || !currentQuestion) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="text-center">
@@ -165,7 +168,7 @@ export default function QuizTestTemplate({
         }, 1000)
       }
     }, DEFAULT_AUTO_ADVANCE_DELAY)
-  }, [currentQuestionIndex, answers, currentQuestion, testId, totalQuestions, router, isAnimating, DEFAULT_AUTO_ADVANCE_DELAY])
+  }, [currentQuestionIndex, answers, currentQuestion, testId, totalQuestions, router, isAnimating])
 
   const questionVariants = {
     enter: { opacity: 0, x: 100 },
@@ -174,8 +177,8 @@ export default function QuizTestTemplate({
   }
 
   const optionVariants = {
-    initial: { opacity: 1, y: 0 },
-    selected: { opacity: 0.6, y: -5 },
+    hover: { scale: 1.02 },
+    tap: { scale: 0.98 },
   }
 
   if (isLoading) {
@@ -183,7 +186,7 @@ export default function QuizTestTemplate({
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600">결과를 분석하는 중...</p>
+          <p className="text-lg text-gray-600">결과를 계산하는 중...</p>
         </div>
       </div>
     )
@@ -192,13 +195,13 @@ export default function QuizTestTemplate({
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-500 to-green-600 py-8 px-4">
       <div className="max-w-2xl mx-auto">
-        {/* 진행률 바 */}
+        {/* 진행률 표시 */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-white/80">
-              질문 {currentQuestionIndex + 1} / {totalQuestions}
+            <span className="text-white text-sm font-medium">
+              {currentQuestionIndex + 1} / {totalQuestions}
             </span>
-            <span className="text-sm font-medium text-white/80">
+            <span className="text-white text-sm font-medium">
               {Math.round(progress)}%
             </span>
           </div>
@@ -206,69 +209,47 @@ export default function QuizTestTemplate({
         </div>
 
         {/* 질문 카드 */}
-        <Card className="mb-8 overflow-hidden shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
-              {currentQuestion.title}
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent className="space-y-4">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentQuestionIndex}
-                variants={questionVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.3 }}
-                className="space-y-4"
-              >
-                {currentQuestion.options.map((option, index) => (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentQuestionIndex}
+            variants={questionVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+          >
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="text-xl text-center text-gray-800">
+                  {currentQuestion.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {currentQuestion.options.map((option: any, index: number) => (
                   <motion.div
                     key={index}
                     variants={optionVariants}
-                    initial="initial"
-                    animate={selectedOption === index ? "selected" : "initial"}
-                    transition={{ duration: 0.2 }}
+                    whileHover="hover"
+                    whileTap="tap"
                   >
                     <Button
-                      className={`w-full justify-start text-left py-6 px-5 text-lg rounded-xl shadow-md transition-all duration-200 h-auto ${
+                      variant={selectedOption === index ? "default" : "outline"}
+                      className={`w-full h-16 text-left justify-start p-4 ${
                         selectedOption === index
-                          ? `bg-gradient-to-r ${gradientFrom} ${gradientTo} text-white scale-[1.02] opacity-90`
-                          : "bg-white text-gray-800 hover:bg-gray-50 border border-gray-200"
+                          ? "bg-blue-600 text-white"
+                          : "bg-white text-gray-800 hover:bg-gray-50"
                       }`}
                       onClick={() => handleAnswer(index)}
                       disabled={isAnimating}
                     >
-                      <div className="flex items-center w-full">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-4 flex-shrink-0 ${
-                          selectedOption === index 
-                            ? 'bg-white/20' 
-                            : 'bg-gray-100'
-                        }`}>
-                          <span className={`font-semibold ${
-                            selectedOption === index ? 'text-white' : 'text-gray-600'
-                          }`}>
-                            {String.fromCharCode(65 + index)}
-                          </span>
-                        </div>
-                        <span className="flex-1">{option.label}</span>
-                      </div>
+                      {option.label}
                     </Button>
                   </motion.div>
                 ))}
-              </motion.div>
-            </AnimatePresence>
-          </CardContent>
-        </Card>
-
-        {/* 힌트 텍스트 */}
-        <div className="text-center">
-          <p className="text-white/80 text-sm">
-            💡 답변을 선택하면 {autoAdvance ? '자동으로' : ''} 다음 질문으로 이동합니다
-          </p>
-        </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   )
