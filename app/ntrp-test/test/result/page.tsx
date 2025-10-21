@@ -229,16 +229,161 @@ export default function NTRPTestResult() {
             <p className="text-lg text-gray-700 bg-green-50 p-4 rounded-lg">{result.nextLevel}</p>
           </div>
 
+          {/* 추가 정보 섹션들 */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">🏆 레벨별 특징</h2>
+              <div className="space-y-4">
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h3 className="font-semibold text-gray-900">기술적 능력</h3>
+                  <p className="text-gray-600 text-sm">
+                    {parseFloat(result.level) >= 4.0 
+                      ? "모든 기본 샷을 완벽하게 구사하며 고급 기술도 활용 가능"
+                      : parseFloat(result.level) >= 3.0
+                      ? "안정적인 기본 샷과 일부 고급 기술 구사 가능"
+                      : "기본적인 스트로크와 서브 기술 보유"
+                    }
+                  </p>
+                </div>
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h3 className="font-semibold text-gray-900">전술적 이해</h3>
+                  <p className="text-gray-600 text-sm">
+                    {parseFloat(result.level) >= 4.0 
+                      ? "복잡한 전략과 패턴 플레이로 상대를 압박"
+                      : parseFloat(result.level) >= 3.0
+                      ? "기본적인 전술 이해와 상황 판단 가능"
+                      : "기본적인 게임 규칙과 스코어링 이해"
+                    }
+                  </p>
+                </div>
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <h3 className="font-semibold text-gray-900">체력과 멘탈</h3>
+                  <p className="text-gray-600 text-sm">
+                    {parseFloat(result.level) >= 4.0 
+                      ? "뛰어난 체력과 강한 정신력으로 경기 주도"
+                      : parseFloat(result.level) >= 3.0
+                      ? "적당한 체력과 집중력으로 안정적 플레이"
+                      : "기본적인 체력과 집중력으로 게임 완주"
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">📈 성장 로드맵</h2>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-green-600 font-bold">1</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">기본기 완성</h3>
+                    <p className="text-gray-600 text-sm">포핸드, 백핸드, 서브 기본 동작 완벽히 익히기</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-blue-600 font-bold">2</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">일관성 향상</h3>
+                    <p className="text-gray-600 text-sm">안정적인 샷과 일정한 서브 정확도 확보</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                    <span className="text-purple-600 font-bold">3</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">전술적 발전</h3>
+                    <p className="text-gray-600 text-sm">상황에 맞는 샷 선택과 전략적 사고 개발</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                    <span className="text-orange-600 font-bold">4</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">고급 기술</h3>
+                    <p className="text-gray-600 text-sm">스핀, 슬라이스, 드롭샷 등 고급 기술 습득</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 레벨별 통계 정보 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">📊 레벨별 통계</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">{result.level}</div>
+                <div className="text-sm text-gray-600">현재 레벨</div>
+              </div>
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">
+                  {parseFloat(result.level) >= 4.0 ? "90%" : parseFloat(result.level) >= 3.0 ? "70%" : "50%"}
+                </div>
+                <div className="text-sm text-gray-600">기술 완성도</div>
+              </div>
+              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">
+                  {parseFloat(result.level) >= 4.0 ? "고급" : parseFloat(result.level) >= 3.0 ? "중급" : "초급"}
+                </div>
+                <div className="text-sm text-gray-600">플레이 수준</div>
+              </div>
+              <div className="text-center p-4 bg-orange-50 rounded-lg">
+                <div className="text-2xl font-bold text-orange-600">
+                  {parseFloat(result.level) >= 4.0 ? "전문" : parseFloat(result.level) >= 3.0 ? "아마추어" : "입문"}
+                </div>
+                <div className="text-sm text-gray-600">분류</div>
+              </div>
+            </div>
+          </div>
+
+          {/* 추천 연습 방법 */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">🎯 맞춤 연습 방법</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-3xl mb-2">🏓</div>
+                <h3 className="font-semibold text-gray-900 mb-2">기본기 연습</h3>
+                <p className="text-sm text-gray-600">
+                  {parseFloat(result.level) >= 3.0 
+                    ? "고급 기술과 전술 연습에 집중"
+                    : "벽치기와 기본 스트로크 반복 연습"
+                  }
+                </p>
+              </div>
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-3xl mb-2">🏃</div>
+                <h3 className="font-semibold text-gray-900 mb-2">체력 훈련</h3>
+                <p className="text-sm text-gray-600">
+                  {parseFloat(result.level) >= 4.0 
+                    ? "전문적인 체력과 멘탈 훈련"
+                    : "기본적인 체력과 지구력 향상"
+                  }
+                </p>
+              </div>
+              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                <div className="text-3xl mb-2">🎮</div>
+                <h3 className="font-semibold text-gray-900 mb-2">실전 경험</h3>
+                <p className="text-sm text-gray-600">
+                  {parseFloat(result.level) >= 3.0 
+                    ? "토너먼트와 고수준 경기 참여"
+                    : "친구들과의 정기적인 게임"
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">📤 결과 공유하기</h2>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button onClick={() => handleShare("twitter")} className="bg-blue-500 hover:bg-blue-600">
-                트위터 공유
-              </Button>
-              <Button onClick={() => handleShare("facebook")} className="bg-blue-700 hover:bg-blue-800">
-                페이스북 공유
-              </Button>
-              <Button onClick={() => handleShare("copy")} variant="outline">
+            <p className="text-gray-600 mb-4">나의 NTRP 테니스 레벨을 친구들과 공유해보세요!</p>
+            <div className="flex justify-center">
+              <Button onClick={() => handleShare("copy")} variant="outline" size="lg" className="px-8">
                 링크 복사
               </Button>
             </div>
