@@ -1,6 +1,5 @@
 import QuizTestTemplate from "@/components/quiz/QuizTestTemplate"
 import { DESSERT_QUESTIONS } from "@/data/dessertQuestions"
-import { calculateMBTI } from "@/lib/mbti"
 
 export default function DessertTestPage() {
   return (
@@ -11,7 +10,6 @@ export default function DessertTestPage() {
       gradientFrom="from-pink-50"
       gradientTo="via-purple-50"
       emoji="🍰"
-      calculateResult={calculateMBTI}
       resultPath="/dessert-style/result"
       autoAdvance={true}
       autoAdvanceDelay={500}

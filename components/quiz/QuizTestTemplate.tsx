@@ -30,9 +30,6 @@ interface QuizTestTemplateProps {
   gradientTo: string
   emoji: string
   
-  // 결과 계산 함수
-  calculateResult: (answers: string[]) => string
-  
   // 결과 페이지 경로
   resultPath: string
   
@@ -50,7 +47,6 @@ export default function QuizTestTemplate({
   gradientFrom,
   gradientTo,
   emoji,
-  calculateResult,
   resultPath,
   autoAdvance = true,
   autoAdvanceDelay = DEFAULT_AUTO_ADVANCE_DELAY
@@ -100,7 +96,16 @@ export default function QuizTestTemplate({
         } else {
           // 테스트 완료
           setIsLoading(true)
-          const result = calculateResult(newAnswers)
+          
+          // testId에 따라 동적으로 결과 계산
+          let result: string
+          try {
+            const { calculateMBTI } = require('@/lib/mbti')
+            result = calculateMBTI(newAnswers)
+          } catch (error) {
+            console.error('Error calculating result:', error)
+            result = 'ENFP' // 기본값
+          }
           
           setTimeout(() => {
             router.push(`${resultPath}?type=${result}`)
@@ -114,7 +119,7 @@ export default function QuizTestTemplate({
       setSelectedOption(null)
       setIsAnimating(false)
     }
-  }, [currentQuestionIndex, answers, currentQuestion, testId, autoAdvance, autoAdvanceDelay, totalQuestions, calculateResult, resultPath, router, isAnimating])
+  }, [currentQuestionIndex, answers, currentQuestion, testId, autoAdvance, autoAdvanceDelay, totalQuestions, resultPath, router, isAnimating])
 
   const questionVariants = {
     enter: { opacity: 0, x: 100 },

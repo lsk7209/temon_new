@@ -1,6 +1,5 @@
 import QuizTestTemplate from "@/components/quiz/QuizTestTemplate"
 import { PHONE_QUESTIONS } from "@/data/phoneQuestions"
-import { calculateMBTI } from "@/lib/mbti"
 
 export default function PhoneTestPage() {
   return (
@@ -11,7 +10,6 @@ export default function PhoneTestPage() {
       gradientFrom="from-blue-50"
       gradientTo="to-indigo-100"
       emoji="📱"
-      calculateResult={calculateMBTI}
       resultPath="/phone-style/result"
       autoAdvance={true}
       autoAdvanceDelay={500}

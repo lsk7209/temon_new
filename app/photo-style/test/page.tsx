@@ -1,6 +1,5 @@
 import QuizTestTemplate from "@/components/quiz/QuizTestTemplate"
 import { PHOTO_QUESTIONS } from "@/data/photoQuestions"
-import { calculateMBTI } from "@/lib/mbti"
 
 export default function PhotoTestPage() {
   return (
@@ -11,7 +10,6 @@ export default function PhotoTestPage() {
       gradientFrom="from-purple-50"
       gradientTo="to-pink-100"
       emoji="📸"
-      calculateResult={calculateMBTI}
       resultPath="/photo-style/result"
       autoAdvance={true}
       autoAdvanceDelay={500}
