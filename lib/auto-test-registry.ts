@@ -240,7 +240,7 @@ export const QUIZ_REGISTRATION_RULES: QuizRegistrationRule[] = [
     }
   },
   {
-    idPattern: "clean-style",
+    idPattern: "room-cleaning",
     autoGenerate: {
       title: "🧹 방 청소 스타일 테스트",
       description: "청소하는 모습으로 알아보는 나의 성격!",

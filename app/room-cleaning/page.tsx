@@ -6,7 +6,7 @@ import { trackTestStart } from "@/lib/analytics"
 import { Home } from "lucide-react"
 
 const config = createQuizConfig({
-  id: 'clean-style',
+  id: 'room-cleaning',
   name: '🧹 방 청소 스타일 테스트',
   description: '당신은 정리 마스터? 아니면 청소 전 구경러? 청소 습관 속에 숨은 나의 성격을 알아보세요!',
   emoji: '🧽',
@@ -34,11 +34,11 @@ const config = createQuizConfig({
   ]
 })
 
-export default function CleanStyleIntroPage() {
+export default function RoomCleaningIntroPage() {
   return (
     <QuizIntroTemplate
       config={config}
-      onTestStart={() => trackTestStart("clean-style", window.location.pathname)}
+      onTestStart={() => trackTestStart("room-cleaning", window.location.pathname)}
     />
   )
 }

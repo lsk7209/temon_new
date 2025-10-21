@@ -1,4 +1,4 @@
-export const cleanResults = [
+export const roomCleaningResults = [
   {
     type: "ENFP",
     name: "🎈 감성 청소러",

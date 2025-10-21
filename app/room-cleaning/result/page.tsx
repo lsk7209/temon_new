@@ -2,8 +2,8 @@
 
 import QuizResultTemplate from "@/components/quiz/QuizResultTemplate"
 
-export default function CleanStyleResultPage() {
+export default function RoomCleaningResultPage() {
   return (
-    <QuizResultTemplate testId="clean-style" />
+    <QuizResultTemplate testId="room-cleaning" />
   )
 }

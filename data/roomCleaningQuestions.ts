@@ -1,4 +1,4 @@
-export interface CleanQuestion {
+export interface RoomCleaningQuestion {
   id: number
   question: string
   choiceA: {
@@ -11,7 +11,7 @@ export interface CleanQuestion {
   }
 }
 
-export const cleanQuestions: CleanQuestion[] = [
+export const roomCleaningQuestions: RoomCleaningQuestion[] = [
   {
     id: 1,
     question: "청소 시작 전 마음가짐은?",

@@ -4,7 +4,7 @@ import { getResultByType } from '@/data/travelPackConfig'
 import { getDessertResult } from '@/data/dessertResults'
 import { getPhotoResult } from '@/data/photoResults'
 import { getPhoneResult } from '@/data/phoneResults'
-import { cleanResults } from '@/data/cleanResults'
+import { roomCleaningResults } from '@/data/roomCleaningResults'
 
 export const runtime = 'edge'
 
@@ -105,13 +105,13 @@ export async function GET(req: NextRequest) {
     // 편의점 테스트는 별도 결과 데이터가 없으므로 기본값 사용
     title = overrideTitle || `${type} 편의점러`
     summary = overrideSummary || '편의점 쇼핑 습관으로 보는 성격'
-  } else if (testType === 'clean-style') {
-    const cleanResult = cleanResults.find(r => r.type === type)
-    if (cleanResult) {
-      result = cleanResult
-      title = overrideTitle || cleanResult.name
-      summary = overrideSummary || cleanResult.summary
-      emoji = cleanResult.emoji
+  } else if (testType === 'room-cleaning') {
+    const roomCleaningResult = roomCleaningResults.find(r => r.type === type)
+    if (roomCleaningResult) {
+      result = roomCleaningResult
+      title = overrideTitle || roomCleaningResult.name
+      summary = overrideSummary || roomCleaningResult.summary
+      emoji = roomCleaningResult.emoji
     } else {
       title = overrideTitle || `${type} 청소러`
       summary = overrideSummary || '청소 습관으로 보는 성격'

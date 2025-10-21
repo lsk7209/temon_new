@@ -37,12 +37,12 @@ export default function QuizTestTemplate({
         console.log('Loading questions for testId:', testId)
         
         switch (testId) {
-          case 'clean-style':
-            console.log('Loading clean-style questions...')
+          case 'room-cleaning':
+            console.log('Loading room-cleaning questions...')
             try {
-              const { cleanQuestions } = await import('@/data/cleanQuestions')
-              console.log('Clean questions loaded:', cleanQuestions)
-              questionsData = cleanQuestions.map(q => ({
+              const { roomCleaningQuestions } = await import('@/data/roomCleaningQuestions')
+              console.log('Room cleaning questions loaded:', roomCleaningQuestions)
+              questionsData = roomCleaningQuestions.map(q => ({
                 id: q.id,
                 title: q.question,
                 options: [
@@ -52,7 +52,7 @@ export default function QuizTestTemplate({
               }))
               console.log('Mapped questions data:', questionsData)
             } catch (importError) {
-              console.error('Error importing cleanQuestions:', importError)
+              console.error('Error importing roomCleaningQuestions:', importError)
               questionsData = []
             }
             break
