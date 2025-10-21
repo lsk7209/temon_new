@@ -114,6 +114,30 @@ export const travelPackQuestions: TravelPackQuestion[] = [
     question: "공항 대기시간",
     choiceA: { text: "사람들과 대화", tags: ["E"] },
     choiceB: { text: "조용히 책/폰", tags: ["I"] }
+  },
+  {
+    id: 13,
+    question: "여행 중 쇼핑할 때",
+    choiceA: { text: "계획된 목록대로 구매", tags: ["J"] },
+    choiceB: { text: "즉흥적으로 마음에 드는 것", tags: ["P"] }
+  },
+  {
+    id: 14,
+    question: "여행지에서 길을 잃었을 때",
+    choiceA: { text: "지도 앱으로 정확한 위치 확인", tags: ["S"] },
+    choiceB: { text: "주변 풍경을 보며 느낌으로 찾기", tags: ["N"] }
+  },
+  {
+    id: 15,
+    question: "여행 중 갈등이 생겼을 때",
+    choiceA: { text: "논리적으로 해결책 찾기", tags: ["T"] },
+    choiceB: { text: "감정을 먼저 이해하고 풀기", tags: ["F"] }
+  },
+  {
+    id: 16,
+    question: "여행 마지막 날",
+    choiceA: { text: "미리 정리하고 여유롭게", tags: ["J"] },
+    choiceB: { text: "마지막까지 즐기다 급히 정리", tags: ["P"] }
   }
 ]
 
