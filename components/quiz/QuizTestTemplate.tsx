@@ -8,109 +8,95 @@ import { Progress } from "@/components/ui/progress"
 import { motion, AnimatePresence } from "framer-motion"
 import { trackTestProgress, trackQuestionAnswer } from "@/lib/analytics"
 
+interface QuizQuestion {
+  id: number
+  title: string
+  options: {
+    label: string
+    tags: string[]
+  }[]
+}
+
 interface QuizTestTemplateProps {
   testId: string
-  questions?: any[] // 동적으로 로드됨
 }
 
 const DEFAULT_AUTO_ADVANCE_DELAY = 500
 
 export default function QuizTestTemplate({
-  testId,
-  questions = []
+  testId
 }: QuizTestTemplateProps) {
   const router = useRouter()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [loadedQuestions, setLoadedQuestions] = useState<any[]>([])
+  const [loadedQuestions, setLoadedQuestions] = useState<QuizQuestion[]>([])
   const [isQuestionsLoaded, setIsQuestionsLoaded] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // testId에 따라 동적으로 질문 데이터 로드
   useEffect(() => {
     const loadQuestions = async () => {
       try {
-        let questionsData: any[] = []
-        
-        console.log('Loading questions for testId:', testId)
+        setError(null)
+        let questionsData: QuizQuestion[] = []
         
         switch (testId) {
           case 'room-cleaning':
-            console.log('Loading room-cleaning questions...')
-            try {
-              const { roomCleaningQuestions } = await import('@/data/roomCleaningQuestions')
-              console.log('Room cleaning questions loaded:', roomCleaningQuestions)
-              questionsData = roomCleaningQuestions.map(q => ({
-                id: q.id,
-                title: q.question,
-                options: [
-                  { label: q.choiceA.text, tags: q.choiceA.tags },
-                  { label: q.choiceB.text, tags: q.choiceB.tags }
-                ]
-              }))
-              console.log('Mapped questions data:', questionsData)
-            } catch (importError) {
-              console.error('Error importing roomCleaningQuestions:', importError)
-              questionsData = []
-            }
+            const { roomCleaningQuestions } = await import('@/data/roomCleaningQuestions')
+            questionsData = roomCleaningQuestions.map(q => ({
+              id: q.id,
+              title: q.question,
+              options: [
+                { label: q.choiceA.text, tags: q.choiceA.tags },
+                { label: q.choiceB.text, tags: q.choiceB.tags }
+              ]
+            }))
             break
           case 'phone-style':
-            try {
-              const { PHONE_QUESTIONS } = await import('@/data/phoneQuestions')
-              questionsData = PHONE_QUESTIONS.map(q => ({
-                id: q.id,
-                title: q.title,
-                options: q.options
-              }))
-            } catch (importError) {
-              console.error('Error importing PHONE_QUESTIONS:', importError)
-              questionsData = []
-            }
+            const { PHONE_QUESTIONS } = await import('@/data/phoneQuestions')
+            questionsData = PHONE_QUESTIONS.map(q => ({
+              id: q.id,
+              title: q.title,
+              options: q.options
+            }))
             break
           case 'photo-style':
-            try {
-              const { PHOTO_QUESTIONS } = await import('@/data/photoQuestions')
-              questionsData = PHOTO_QUESTIONS.map(q => ({
-                id: q.id,
-                title: q.title,
-                options: q.options
-              }))
-            } catch (importError) {
-              console.error('Error importing PHOTO_QUESTIONS:', importError)
-              questionsData = []
-            }
+            const { PHOTO_QUESTIONS } = await import('@/data/photoQuestions')
+            questionsData = PHOTO_QUESTIONS.map(q => ({
+              id: q.id,
+              title: q.title,
+              options: q.options
+            }))
             break
           case 'dessert-style':
-            try {
-              const { DESSERT_QUESTIONS } = await import('@/data/dessertQuestions')
-              questionsData = DESSERT_QUESTIONS.map(q => ({
-                id: q.id,
-                title: q.title,
-                options: q.options
-              }))
-            } catch (importError) {
-              console.error('Error importing DESSERT_QUESTIONS:', importError)
-              questionsData = []
-            }
+            const { DESSERT_QUESTIONS } = await import('@/data/dessertQuestions')
+            questionsData = DESSERT_QUESTIONS.map(q => ({
+              id: q.id,
+              title: q.title,
+              options: q.options
+            }))
             break
           default:
-            questionsData = questions
+            throw new Error(`Unknown testId: ${testId}`)
         }
         
-        console.log('Final questions data:', questionsData)
+        if (questionsData.length === 0) {
+          throw new Error('No questions found for this test')
+        }
+        
         setLoadedQuestions(questionsData)
         setIsQuestionsLoaded(true)
       } catch (error) {
         console.error('Error loading questions:', error)
-        setLoadedQuestions(questions)
+        setError(error instanceof Error ? error.message : 'Failed to load questions')
         setIsQuestionsLoaded(true)
       }
     }
     
     loadQuestions()
-  }, [testId, questions])
+  }, [testId])
 
   const currentQuestion = loadedQuestions[currentQuestionIndex]
   const totalQuestions = loadedQuestions.length
@@ -122,6 +108,25 @@ export default function QuizTestTemplate({
     }
   }, [currentQuestionIndex, totalQuestions, testId])
 
+  // 에러 상태 처리
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">오류가 발생했습니다</h2>
+          <p className="text-lg text-gray-600 mb-4">{error}</p>
+          <Button 
+            onClick={() => window.location.reload()} 
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            다시 시도
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   // 질문이 로드되지 않았으면 로딩 표시
   if (!isQuestionsLoaded || loadedQuestions.length === 0 || !currentQuestion) {
     return (
@@ -129,7 +134,6 @@ export default function QuizTestTemplate({
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">질문을 불러오는 중...</p>
-          <p className="text-sm text-gray-500 mt-2">testId: {testId}</p>
         </div>
       </div>
     )

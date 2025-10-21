@@ -53,6 +53,7 @@ export default function QuizResultTemplate({
 }: QuizResultTemplateProps) {
   const [result, setResult] = useState<QuizResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [shareText, setShareText] = useState("")
   const [showCopied, setShowCopied] = useState(false)
   const searchParams = useSearchParams()
@@ -136,7 +137,28 @@ export default function QuizResultTemplate({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
-        <p className="text-lg text-gray-600">결과를 불러오는 중...</p>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600">결과를 불러오는 중...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">오류가 발생했습니다</h2>
+          <p className="text-lg text-gray-600 mb-4">{error}</p>
+          <Button 
+            onClick={() => window.location.reload()} 
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            다시 시도
+          </Button>
+        </div>
       </div>
     )
   }
