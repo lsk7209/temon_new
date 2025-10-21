@@ -31,8 +31,19 @@ export default function TravelPackTestPage() {
     const savedQuestion = localStorage.getItem('travel-pack-current-question')
     
     if (savedAnswers && savedQuestion) {
-      setAnswers(JSON.parse(savedAnswers))
-      setCurrentQuestion(parseInt(savedQuestion))
+      const parsedAnswers = JSON.parse(savedAnswers)
+      const parsedQuestion = parseInt(savedQuestion)
+      
+      // 질문 수가 12개로 줄어들었으므로 진행 상황 초기화
+      if (parsedQuestion >= 12) {
+        localStorage.removeItem('travel-pack-answers')
+        localStorage.removeItem('travel-pack-current-question')
+        setAnswers([])
+        setCurrentQuestion(0)
+      } else {
+        setAnswers(parsedAnswers)
+        setCurrentQuestion(parsedQuestion)
+      }
     }
   }, [])
 
