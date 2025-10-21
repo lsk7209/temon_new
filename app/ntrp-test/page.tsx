@@ -1,6 +1,6 @@
 "use client"
 
-import { QuizIntroTemplate } from "@/components/quiz/QuizIntroTemplate"
+import QuizIntroTemplate from "@/components/quiz/QuizIntroTemplate"
 import { createQuizConfig } from "@/lib/quiz-templates"
 import { trackTestStart } from "@/lib/analytics"
 
