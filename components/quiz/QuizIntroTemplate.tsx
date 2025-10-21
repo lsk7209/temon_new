@@ -154,7 +154,9 @@ export default function QuizIntroTemplate({
                       {finalFeatures.map((feature, index) => (
                         <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                           <div className={`w-2 h-2 rounded-full bg-${finalAccentColor}-500`}></div>
-                          <span className="text-gray-700">{feature}</span>
+                          <span className="text-gray-700">
+                            {typeof feature === 'string' ? feature : feature.text}
+                          </span>
                         </div>
                       ))}
                     </div>
