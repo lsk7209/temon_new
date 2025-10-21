@@ -12,7 +12,7 @@ on:
   
   # GitHub Actions 실행 완료 후
   workflow_run:
-    workflows: ["배포"]
+    workflows: ["pages", "deploy"]
     types: [completed]
   
   # 스케줄 실행 (매 10분마다)
@@ -42,25 +42,15 @@ jobs:
         id: check_deployment
         run: |
           echo "🔍 배포 상태 확인 중..."
-          npm run check-deployment
           
-          # GitHub Actions 상태 확인
-          LATEST_RUN=$(gh api repos/${{ github.repository }}/actions/runs --jq '.workflow_runs[0]')
-          STATUS=$(echo $LATEST_RUN | jq -r '.status')
-          CONCLUSION=$(echo $LATEST_RUN | jq -r '.conclusion')
-          
-          echo "📊 최신 실행 상태: $STATUS"
-          echo "🎯 결론: $CONCLUSION"
-          
-          if [ "$CONCLUSION" = "failure" ]; then
+          # 현재 워크플로우가 실패한 경우에만 재배포
+          if [ "${{ github.event.workflow_run.conclusion }}" = "failure" ]; then
             echo "❌ 배포 실패 감지됨"
             echo "has_error=true" >> $GITHUB_OUTPUT
           else
             echo "✅ 배포 상태 정상"
             echo "has_error=false" >> $GITHUB_OUTPUT
           fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: 자동 재배포 실행
         if: steps.check_deployment.outputs.has_error == 'true' || github.event.inputs.force_redeploy == 'true'
