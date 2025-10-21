@@ -1,0 +1,98 @@
+name: 배포 상태 모니터링 및 자동 재배포
+
+on:
+  # 수동 실행
+  workflow_dispatch:
+    inputs:
+      force_redeploy:
+        description: '강제 재배포 실행'
+        required: false
+        default: false
+        type: boolean
+  
+  # GitHub Actions 실행 완료 후
+  workflow_run:
+    workflows: ["배포"]
+    types: [completed]
+  
+  # 스케줄 실행 (매 10분마다)
+  schedule:
+    - cron: '*/10 * * * *'
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 의존성 설치
+        run: npm ci
+      
+      - name: 배포 상태 확인
+        id: check_deployment
+        run: |
+          echo "🔍 배포 상태 확인 중..."
+          npm run check-deployment
+          
+          # GitHub Actions 상태 확인
+          LATEST_RUN=$(gh api repos/${{ github.repository }}/actions/runs --jq '.workflow_runs[0]')
+          STATUS=$(echo $LATEST_RUN | jq -r '.status')
+          CONCLUSION=$(echo $LATEST_RUN | jq -r '.conclusion')
+          
+          echo "📊 최신 실행 상태: $STATUS"
+          echo "🎯 결론: $CONCLUSION"
+          
+          if [ "$CONCLUSION" = "failure" ]; then
+            echo "❌ 배포 실패 감지됨"
+            echo "has_error=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ 배포 상태 정상"
+            echo "has_error=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 자동 재배포 실행
+        if: steps.check_deployment.outputs.has_error == 'true' || github.event.inputs.force_redeploy == 'true'
+        run: |
+          echo "🔄 자동 재배포 시작..."
+          
+          # Git 설정
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # 빈 커밋으로 재배포 트리거
+          git commit --allow-empty -m "fix: 자동 재배포 - 배포 오류 수정 ($(date '+%Y-%m-%d %H:%M:%S'))"
+          git push origin main
+          
+          echo "✅ 자동 재배포 완료!"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 재배포 후 상태 확인
+        if: steps.check_deployment.outputs.has_error == 'true' || github.event.inputs.force_redeploy == 'true'
+        run: |
+          echo "⏰ 30초 대기 후 재배포 상태 확인..."
+          sleep 30
+          
+          echo "🔍 재배포 후 상태 확인 중..."
+          npm run check-deployment
+      
+      - name: 알림 전송 (선택사항)
+        if: always()
+        run: |
+          if [ "${{ steps.check_deployment.outputs.has_error }}" = "true" ]; then
+            echo "❌ 배포 오류가 감지되어 자동 재배포를 실행했습니다."
+          else
+            echo "✅ 배포 상태가 정상입니다."
+          fi

@@ -10,6 +10,8 @@
     "deploy": "node scripts/deploy.js",
     "auto-deploy": "bash scripts/auto-deploy.sh",
     "auto-deploy:win": "scripts\\auto-deploy.bat",
+    "check-deployment": "node scripts/check-deployment.js",
+    "monitor-deployment": "node scripts/check-deployment.js && echo '배포 상태 모니터링 완료'",
     "update-prd": "node scripts/update-prd.js",
     "quiz:register": "node scripts/auto-quiz-registry.js register",
     "quiz:list": "node scripts/auto-quiz-registry.js list",
