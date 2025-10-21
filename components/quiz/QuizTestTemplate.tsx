@@ -162,15 +162,6 @@ export default function QuizTestTemplate({
         {/* 질문 카드 */}
         <Card className="mb-8 overflow-hidden shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center pb-4">
-            {/* 질문 관련 OG 이미지 */}
-            <div className="mb-4">
-              <img
-                src={`/api/og?testType=${testId}&question=${encodeURIComponent(currentQuestion.title)}&emoji=${emoji}&bg=${gradientFrom.replace('from-', '').replace('-500', '-gradient')}`}
-                alt={`질문 ${currentQuestionIndex + 1} 이미지`}
-                className="w-full max-w-sm mx-auto rounded-lg shadow-md"
-                style={{ aspectRatio: '16/9' }}
-              />
-            </div>
             <CardTitle className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
               {currentQuestion.title}
             </CardTitle>
