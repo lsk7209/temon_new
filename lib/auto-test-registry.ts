@@ -1,7 +1,7 @@
 // 자동 퀴즈 등록 시스템
 // 새로운 퀴즈가 개발되면 자동으로 테스트 목록에 추가되는 시스템
 
-import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, Camera, Smartphone, type LucideIcon } from "lucide-react"
+import { Coffee, Soup, Heart, BookOpen, AlarmClock, Trophy, Clapperboard, Luggage, ShoppingCart, Cake, Camera, Smartphone, Broom, type LucideIcon } from "lucide-react"
 
 export interface Test {
   id: string
@@ -233,6 +233,21 @@ export const QUIZ_REGISTRATION_RULES: QuizRegistrationRule[] = [
       color: "from-blue-500 to-indigo-600",
       category: "생활",
       tags: ["스마트폰", "습관", "디지털", "성격"]
+    },
+    optional: {
+      badge: "NEW",
+      new: true
+    }
+  },
+  {
+    idPattern: "clean-style",
+    autoGenerate: {
+      title: "🧹 방 청소 스타일 테스트",
+      description: "청소하는 모습으로 알아보는 나의 성격!",
+      icon: Broom,
+      color: "from-blue-500 to-green-600",
+      category: "라이프스타일",
+      tags: ["청소", "정리", "방", "성격"]
     },
     optional: {
       badge: "NEW",

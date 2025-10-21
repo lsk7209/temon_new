@@ -375,3 +375,59 @@ if (!isValid) {
 - 동적 임포트로 필요한 컴포넌트만 로드
 - OG 이미지 자동 생성으로 SEO 최적화
 - 템플릿 시스템으로 번들 크기 최적화
+
+## 자동 등록 시스템 (v3.2.0)
+
+### 새로운 퀴즈 자동 등록
+새로운 퀴즈를 개발하면 자동으로 테스트 목록에 추가되는 시스템이 구축되었습니다.
+
+#### 자동 등록 방법
+1. **`lib/auto-test-registry.ts`에 등록 규칙 추가**:
+```typescript
+{
+  idPattern: "your-quiz-id",
+  autoGenerate: {
+    title: "퀴즈 제목",
+    description: "퀴즈 설명",
+    icon: YourIcon,
+    color: "from-color-500 to-color-600",
+    category: "카테고리",
+    tags: ["태그1", "태그2", "태그3"]
+  },
+  optional: {
+    badge: "NEW", // 또는 "HOT"
+    new: true,
+    popular: true
+  }
+}
+```
+
+2. **자동으로 테스트 페이지에 표시**:
+- 퀴즈 개발 완료 시 자동으로 `/tests` 페이지에 추가
+- 검색 및 카테고리 필터링 지원
+- 참여자 수, 평점, 배지 자동 생성
+
+#### 방청소 퀴즈 등록 예시
+```typescript
+{
+  idPattern: "clean-style",
+  autoGenerate: {
+    title: "🧹 방 청소 스타일 테스트",
+    description: "청소하는 모습으로 알아보는 나의 성격!",
+    icon: Broom,
+    color: "from-blue-500 to-green-600",
+    category: "라이프스타일",
+    tags: ["청소", "정리", "방", "성격"]
+  },
+  optional: {
+    badge: "NEW",
+    new: true
+  }
+}
+```
+
+### 자동 등록 시스템의 장점
+- **개발 효율성**: 퀴즈 개발 후 수동 등록 불필요
+- **일관성**: 모든 퀴즈가 동일한 형식으로 등록
+- **확장성**: 새로운 퀴즈 추가 시 자동으로 시스템에 반영
+- **유지보수**: 중앙화된 등록 시스템으로 관리 용이
