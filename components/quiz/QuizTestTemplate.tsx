@@ -37,25 +37,6 @@ export default function QuizTestTemplate({
         console.log('Loading questions for testId:', testId)
         
         switch (testId) {
-          case 'clean-style':
-            console.log('Loading clean-style questions...')
-            try {
-              const { cleanQuestions } = await import('@/data/cleanQuestions')
-              console.log('Clean questions loaded:', cleanQuestions)
-              questionsData = cleanQuestions.map(q => ({
-                id: q.id,
-                title: q.question,
-                options: [
-                  { label: q.choiceA.text, tags: q.choiceA.tags },
-                  { label: q.choiceB.text, tags: q.choiceB.tags }
-                ]
-              }))
-              console.log('Mapped questions data:', questionsData)
-            } catch (importError) {
-              console.error('Error importing cleanQuestions:', importError)
-              questionsData = []
-            }
-            break
           case 'phone-style':
             try {
               const { phoneQuestions } = await import('@/data/phoneQuestions')
