@@ -35,7 +35,9 @@ export default function QuizTestTemplate({
         
         switch (testId) {
           case 'clean-style':
+            console.log('Loading clean-style questions...')
             const { cleanQuestions } = await import('@/data/cleanQuestions')
+            console.log('Clean questions loaded:', cleanQuestions)
             questionsData = cleanQuestions.map(q => ({
               id: q.id,
               title: q.question,
@@ -44,6 +46,7 @@ export default function QuizTestTemplate({
                 { label: q.choiceB.text, tags: q.choiceB.tags }
               ]
             }))
+            console.log('Mapped questions data:', questionsData)
             break
           case 'phone-style':
             const { phoneQuestions } = await import('@/data/phoneQuestions')
