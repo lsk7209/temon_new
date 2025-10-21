@@ -37,30 +37,7 @@ interface QuizResult {
 }
 
 interface QuizResultTemplateProps {
-  // 기본 정보
   testId: string
-  testName: string
-  
-  // 스타일링
-  gradientFrom: string
-  gradientTo: string
-  
-  // 결과 섹션들
-  sections?: {
-    showTraits?: boolean
-    showHabits?: boolean
-    showRecommendations?: boolean
-    showCompanions?: boolean
-    showTips?: boolean
-    showDestinations?: boolean
-  }
-  
-  // 커스텀 섹션들
-  customSections?: Array<{
-    title: string
-    icon: React.ReactNode
-    content: React.ReactNode
-  }>
   
   // 관련 테스트
   relatedTests?: Array<{
@@ -72,20 +49,7 @@ interface QuizResultTemplateProps {
 }
 
 export default function QuizResultTemplate({
-  testId,
-  testName,
-  gradientFrom,
-  gradientTo,
-  sections = {
-    showTraits: true,
-    showHabits: false,
-    showRecommendations: false,
-    showCompanions: false,
-    showTips: false,
-    showDestinations: false
-  },
-  customSections = [],
-  relatedTests = []
+  testId
 }: QuizResultTemplateProps) {
   const [result, setResult] = useState<QuizResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -100,7 +64,27 @@ export default function QuizResultTemplate({
       // 각 테스트별로 결과를 가져오는 로직
       let resultData: QuizResult | null = null
       
-      if (testId === 'phone-style') {
+      if (testId === 'clean-style') {
+        const { cleanResults } = require('@/data/cleanResults')
+        const cleanResult = cleanResults.find((r: any) => r.type === type)
+        if (cleanResult) {
+          resultData = {
+            type: cleanResult.type,
+            emoji: cleanResult.emoji,
+            title: cleanResult.name,
+            tagline: cleanResult.summary,
+            summary: [cleanResult.description],
+            traits: cleanResult.features,
+            color: cleanResult.accentColor,
+            og: {
+              bg: `${cleanResult.gradientFrom}-${cleanResult.gradientTo}`,
+              icon: cleanResult.emoji
+            },
+            shareText: cleanResult.shareText,
+            hashtags: ["청소테스트", "방정리", "성격테스트"]
+          }
+        }
+      } else if (testId === 'phone-style') {
         const { getPhoneResult } = require('@/data/phoneResults')
         resultData = getPhoneResult(type)
       } else if (testId === 'photo-style') {

@@ -8,48 +8,16 @@ import { Progress } from "@/components/ui/progress"
 import { motion, AnimatePresence } from "framer-motion"
 import { trackTestProgress, trackQuestionAnswer } from "@/lib/analytics"
 
-interface QuizOption {
-  label: string
-  tags: string[]
-}
-
-interface QuizQuestion {
-  id: number
-  title: string
-  options: QuizOption[]
-}
-
 interface QuizTestTemplateProps {
-  // 기본 정보
-  questions: QuizQuestion[]
   testId: string
-  testName: string
-  
-  // 스타일링
-  gradientFrom: string
-  gradientTo: string
-  emoji: string
-  
-  // 결과 페이지 경로
-  resultPath: string
-  
-  // 자동 진행 설정
-  autoAdvance?: boolean
-  autoAdvanceDelay?: number
+  questions?: any[] // 동적으로 로드됨
 }
 
 const DEFAULT_AUTO_ADVANCE_DELAY = 500
 
 export default function QuizTestTemplate({
-  questions,
   testId,
-  testName,
-  gradientFrom,
-  gradientTo,
-  emoji,
-  resultPath,
-  autoAdvance = true,
-  autoAdvanceDelay = DEFAULT_AUTO_ADVANCE_DELAY
+  questions = []
 }: QuizTestTemplateProps) {
   const router = useRouter()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -57,17 +25,76 @@ export default function QuizTestTemplate({
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadedQuestions, setLoadedQuestions] = useState<any[]>([])
 
-  const currentQuestion = questions[currentQuestionIndex]
-  const totalQuestions = questions.length
+  // testId에 따라 동적으로 질문 데이터 로드
+  useEffect(() => {
+    const loadQuestions = async () => {
+      try {
+        let questionsData: any[] = []
+        
+        switch (testId) {
+          case 'clean-style':
+            const { cleanQuestions } = await import('@/data/cleanQuestions')
+            questionsData = cleanQuestions.map(q => ({
+              id: q.id,
+              title: q.question,
+              options: [
+                { label: q.choiceA.text, tags: q.choiceA.tags },
+                { label: q.choiceB.text, tags: q.choiceB.tags }
+              ]
+            }))
+            break
+          case 'phone-style':
+            const { phoneQuestions } = await import('@/data/phoneQuestions')
+            questionsData = phoneQuestions
+            break
+          case 'photo-style':
+            const { photoQuestions } = await import('@/data/photoQuestions')
+            questionsData = photoQuestions
+            break
+          case 'dessert-style':
+            const { dessertQuestions } = await import('@/data/dessertQuestions')
+            questionsData = dessertQuestions
+            break
+          default:
+            questionsData = questions
+        }
+        
+        setLoadedQuestions(questionsData)
+      } catch (error) {
+        console.error('Error loading questions:', error)
+        setLoadedQuestions(questions)
+      }
+    }
+    
+    loadQuestions()
+  }, [testId, questions])
+
+  const currentQuestion = loadedQuestions[currentQuestionIndex]
+  const totalQuestions = loadedQuestions.length
   const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100
 
   useEffect(() => {
-    trackTestProgress(testId, currentQuestionIndex + 1, totalQuestions, window.location.pathname)
+    if (totalQuestions > 0) {
+      trackTestProgress(testId, currentQuestionIndex + 1, totalQuestions, window.location.pathname)
+    }
   }, [currentQuestionIndex, totalQuestions, testId])
 
+  // 질문이 로드되지 않았으면 로딩 표시
+  if (loadedQuestions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600">질문을 불러오는 중...</p>
+        </div>
+      </div>
+    )
+  }
+
   const handleAnswer = useCallback((optionIndex: number) => {
-    if (isAnimating) return
+    if (isAnimating || !currentQuestion) return
 
     const selectedOptionData = currentQuestion.options[optionIndex]
     if (!selectedOptionData) return
@@ -84,42 +111,34 @@ export default function QuizTestTemplate({
       window.location.pathname
     )
 
-    if (autoAdvance) {
-      setTimeout(() => {
-        const newAnswers = [...answers, ...selectedOptionData.tags]
-        setAnswers(newAnswers)
-
-        if (currentQuestionIndex < totalQuestions - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1)
-          setSelectedOption(null)
-          setIsAnimating(false)
-        } else {
-          // 테스트 완료
-          setIsLoading(true)
-          
-          // testId에 따라 동적으로 결과 계산
-          let result: string
-          try {
-            const { calculateMBTI } = require('@/lib/mbti')
-            result = calculateMBTI(newAnswers)
-          } catch (error) {
-            console.error('Error calculating result:', error)
-            result = 'ENFP' // 기본값
-          }
-          
-          setTimeout(() => {
-            router.push(`${resultPath}?type=${result}`)
-          }, 1000)
-        }
-      }, autoAdvanceDelay)
-    } else {
-      // 수동 진행
+    setTimeout(() => {
       const newAnswers = [...answers, ...selectedOptionData.tags]
       setAnswers(newAnswers)
-      setSelectedOption(null)
-      setIsAnimating(false)
-    }
-  }, [currentQuestionIndex, answers, currentQuestion, testId, autoAdvance, autoAdvanceDelay, totalQuestions, resultPath, router, isAnimating])
+
+      if (currentQuestionIndex < totalQuestions - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1)
+        setSelectedOption(null)
+        setIsAnimating(false)
+      } else {
+        // 테스트 완료
+        setIsLoading(true)
+        
+        // testId에 따라 동적으로 결과 계산
+        let result: string
+        try {
+          const { calculateMBTI } = require('@/lib/mbti')
+          result = calculateMBTI(newAnswers)
+        } catch (error) {
+          console.error('Error calculating result:', error)
+          result = 'ENFP' // 기본값
+        }
+        
+        setTimeout(() => {
+          router.push(`/clean-style/result?type=${result}`)
+        }, 1000)
+      }
+    }, DEFAULT_AUTO_ADVANCE_DELAY)
+  }, [currentQuestionIndex, answers, currentQuestion, testId, totalQuestions, router, isAnimating])
 
   const questionVariants = {
     enter: { opacity: 0, x: 100 },
@@ -144,7 +163,7 @@ export default function QuizTestTemplate({
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${gradientFrom} ${gradientTo} py-8 px-4`}>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-green-600 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* 진행률 바 */}
         <div className="mb-8">
