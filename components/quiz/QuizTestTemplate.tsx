@@ -164,7 +164,7 @@ export default function QuizTestTemplate({
         }
         
         setTimeout(() => {
-          router.push(`/clean-style/result?type=${result}`)
+          router.push(`/${testId}/result?type=${result}`)
         }, 1000)
       }
     }, DEFAULT_AUTO_ADVANCE_DELAY)
