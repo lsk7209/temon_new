@@ -8,30 +8,47 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 
 interface QuizIntroTemplateProps {
-  // 기본 정보
-  title: string
-  description: string
-  emoji: string
-  category: string
-  estimatedTime: string
-  questionCount: number
+  // config 객체 또는 개별 props
+  config?: {
+    id: string
+    name: string
+    description: string
+    emoji: string
+    category: string
+    estimatedTime: string
+    questionCount: number
+    gradientFrom: string
+    gradientTo: string
+    accentColor: string
+    testPath: string
+    isNew?: boolean
+    isPopular?: boolean
+    features?: string[]
+    tags?: string[]
+  }
+  onTestStart?: () => void
   
-  // 스타일링
-  gradientFrom: string
-  gradientTo: string
-  accentColor: string
-  
-  // 기능
-  testPath: string
+  // 개별 props (config가 없을 때 사용)
+  title?: string
+  description?: string
+  emoji?: string
+  category?: string
+  estimatedTime?: string
+  questionCount?: number
+  gradientFrom?: string
+  gradientTo?: string
+  accentColor?: string
+  testPath?: string
   isNew?: boolean
   isPopular?: boolean
-  
-  // 추가 정보
   features?: string[]
   tags?: string[]
 }
 
 export default function QuizIntroTemplate({
+  config,
+  onTestStart,
+  // 개별 props (config가 없을 때 사용)
   title,
   description,
   emoji,
@@ -47,6 +64,21 @@ export default function QuizIntroTemplate({
   features = [],
   tags = []
 }: QuizIntroTemplateProps) {
+  // config가 있으면 config의 값들을 사용, 없으면 개별 props 사용
+  const finalTitle = config?.name || title || '퀴즈'
+  const finalDescription = config?.description || description || '재미있는 성격 테스트'
+  const finalEmoji = config?.emoji || emoji || '🎯'
+  const finalCategory = config?.category || category || '성격'
+  const finalEstimatedTime = config?.estimatedTime || estimatedTime || '5분'
+  const finalQuestionCount = config?.questionCount || questionCount || 12
+  const finalGradientFrom = config?.gradientFrom || gradientFrom || 'from-blue-500'
+  const finalGradientTo = config?.gradientTo || gradientTo || 'to-indigo-600'
+  const finalAccentColor = config?.accentColor || accentColor || 'blue'
+  const finalTestPath = config?.testPath || testPath || '/test'
+  const finalIsNew = config?.isNew || isNew
+  const finalIsPopular = config?.isPopular || isPopular
+  const finalFeatures = config?.features || features
+  const finalTags = config?.tags || tags
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
       <div className="container mx-auto px-4 py-8">
@@ -58,12 +90,12 @@ export default function QuizIntroTemplate({
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="text-6xl mb-4">{emoji}</div>
+            <div className="text-6xl mb-4">{finalEmoji}</div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              {title}
+              {finalTitle}
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              {description}
+              {finalDescription}
             </p>
           </motion.div>
 
@@ -76,16 +108,16 @@ export default function QuizIntroTemplate({
           >
             <Card className="overflow-hidden shadow-2xl border-0">
               <div 
-                className={`bg-gradient-to-r ${gradientFrom} ${gradientTo} p-8 text-white text-center relative`}
+                className={`bg-gradient-to-r ${finalGradientFrom} ${finalGradientTo} p-8 text-white text-center relative`}
               >
                 {/* 배지들 */}
                 <div className="absolute top-4 right-4 flex gap-2">
-                  {isNew && (
+                  {finalIsNew && (
                     <Badge className="bg-white/20 text-white border-white/30">
                       NEW
                     </Badge>
                   )}
-                  {isPopular && (
+                  {finalIsPopular && (
                     <Badge className="bg-white/20 text-white border-white/30">
                       <Star className="w-3 h-3 mr-1" />
                       인기
@@ -93,35 +125,35 @@ export default function QuizIntroTemplate({
                   )}
                 </div>
 
-                <div className="text-8xl mb-6">{emoji}</div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
-                <p className="text-xl opacity-90 mb-6">{description}</p>
+                <div className="text-8xl mb-6">{finalEmoji}</div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">{finalTitle}</h2>
+                <p className="text-xl opacity-90 mb-6">{finalDescription}</p>
                 
                 {/* 테스트 정보 */}
                 <div className="flex justify-center gap-6 text-sm">
                   <div className="flex items-center gap-2 bg-white/20 rounded-full px-4 py-2">
                     <Users className="w-4 h-4" />
-                    <span>{category}</span>
+                    <span>{finalCategory}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-white/20 rounded-full px-4 py-2">
                     <Clock className="w-4 h-4" />
-                    <span>{estimatedTime}</span>
+                    <span>{finalEstimatedTime}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-white/20 rounded-full px-4 py-2">
-                    <span>{questionCount}문항</span>
+                    <span>{finalQuestionCount}문항</span>
                   </div>
                 </div>
               </div>
 
               <CardContent className="p-8">
                 {/* 특징 */}
-                {features.length > 0 && (
+                {finalFeatures.length > 0 && (
                   <div className="mb-8">
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">이 테스트의 특징</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {features.map((feature, index) => (
+                      {finalFeatures.map((feature, index) => (
                         <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                          <div className={`w-2 h-2 rounded-full bg-${accentColor}-500`}></div>
+                          <div className={`w-2 h-2 rounded-full bg-${finalAccentColor}-500`}></div>
                           <span className="text-gray-700">{feature}</span>
                         </div>
                       ))}
@@ -130,11 +162,11 @@ export default function QuizIntroTemplate({
                 )}
 
                 {/* 태그 */}
-                {tags.length > 0 && (
+                {finalTags.length > 0 && (
                   <div className="mb-8">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">관련 태그</h3>
                     <div className="flex flex-wrap gap-2">
-                      {tags.map((tag, index) => (
+                      {finalTags.map((tag, index) => (
                         <Badge key={index} variant="secondary" className="text-sm">
                           #{tag}
                         </Badge>
@@ -145,10 +177,11 @@ export default function QuizIntroTemplate({
 
                 {/* 시작 버튼 */}
                 <div className="text-center">
-                  <Link href={testPath}>
+                  <Link href={finalTestPath}>
                     <Button 
                       size="lg" 
-                      className={`bg-gradient-to-r ${gradientFrom} ${gradientTo} hover:opacity-90 text-white text-lg px-8 py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-105`}
+                      className={`bg-gradient-to-r ${finalGradientFrom} ${finalGradientTo} hover:opacity-90 text-white text-lg px-8 py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-105`}
+                      onClick={onTestStart}
                     >
                       <Play className="w-5 h-5 mr-2" />
                       테스트 시작하기
