@@ -64,7 +64,27 @@ export default function QuizResultTemplate({
       // 각 테스트별로 결과를 가져오는 로직
       let resultData: QuizResult | null = null
       
-      if (testId === 'phone-style') {
+      if (testId === 'clean-style') {
+        const { cleanResults } = require('@/data/cleanResults')
+        const cleanResult = cleanResults.find((r: any) => r.type === type)
+        if (cleanResult) {
+          resultData = {
+            type: cleanResult.type,
+            emoji: cleanResult.emoji,
+            title: cleanResult.name,
+            tagline: cleanResult.summary,
+            summary: [cleanResult.description],
+            traits: cleanResult.features,
+            color: cleanResult.accentColor,
+            og: {
+              bg: `${cleanResult.gradientFrom}-${cleanResult.gradientTo}`,
+              icon: cleanResult.emoji
+            },
+            shareText: cleanResult.shareText,
+            hashtags: ["청소테스트", "방정리", "성격테스트"]
+          }
+        }
+      } else if (testId === 'phone-style') {
         const { getPhoneResult } = require('@/data/phoneResults')
         resultData = getPhoneResult(type)
       } else if (testId === 'photo-style') {
