@@ -323,37 +323,13 @@ export default function TravelPackResultPage() {
                 <p className="text-gray-800 font-medium">{shareText}</p>
               </div>
               
-              <div className="flex flex-wrap gap-3">
+              <div className="flex justify-center">
                 <Button
                   onClick={() => handleShare('copy')}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 px-8"
                 >
                   <Copy className="h-4 w-4" />
                   링크 복사
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleShare('kakao')}
-                  className="flex items-center gap-2"
-                >
-                  <Share2 className="h-4 w-4" />
-                  카카오톡
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleShare('twitter')}
-                  className="flex items-center gap-2"
-                >
-                  <Share2 className="h-4 w-4" />
-                  트위터
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleShare('facebook')}
-                  className="flex items-center gap-2"
-                >
-                  <Share2 className="h-4 w-4" />
-                  페이스북
                 </Button>
               </div>
             </div>

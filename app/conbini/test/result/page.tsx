@@ -279,18 +279,10 @@ export default function ConbiniResultPage() {
             <p className="text-gray-700 mb-4">
               내 편의점 스타일을 친구들에게 공유하고 함께 쇼핑할 파트너를 찾아보세요!
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={() => handleShare("copy")} className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+            <div className="flex justify-center">
+              <Button onClick={() => handleShare("copy")} className="bg-gray-100 text-gray-800 hover:bg-gray-200 px-8">
                 {showCopied ? <CheckCircle className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                 {showCopied ? "링크 복사됨!" : "링크 복사"}
-              </Button>
-              <Button onClick={() => handleShare("kakao")} className="bg-yellow-400 text-gray-900 hover:bg-yellow-500">
-                <Share2 className="h-4 w-4 mr-2" />
-                카카오톡
-              </Button>
-              <Button onClick={() => handleShare("twitter")} className="bg-blue-400 text-white hover:bg-blue-500">
-                <Share2 className="h-4 w-4 mr-2" />
-                X (트위터)
               </Button>
             </div>
           </CardContent>
