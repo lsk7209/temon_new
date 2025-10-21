@@ -33,37 +33,60 @@ export default function QuizTestTemplate({
       try {
         let questionsData: any[] = []
         
+        console.log('Loading questions for testId:', testId)
+        
         switch (testId) {
           case 'clean-style':
             console.log('Loading clean-style questions...')
-            const { cleanQuestions } = await import('@/data/cleanQuestions')
-            console.log('Clean questions loaded:', cleanQuestions)
-            questionsData = cleanQuestions.map(q => ({
-              id: q.id,
-              title: q.question,
-              options: [
-                { label: q.choiceA.text, tags: q.choiceA.tags },
-                { label: q.choiceB.text, tags: q.choiceB.tags }
-              ]
-            }))
-            console.log('Mapped questions data:', questionsData)
+            try {
+              const { cleanQuestions } = await import('@/data/cleanQuestions')
+              console.log('Clean questions loaded:', cleanQuestions)
+              questionsData = cleanQuestions.map(q => ({
+                id: q.id,
+                title: q.question,
+                options: [
+                  { label: q.choiceA.text, tags: q.choiceA.tags },
+                  { label: q.choiceB.text, tags: q.choiceB.tags }
+                ]
+              }))
+              console.log('Mapped questions data:', questionsData)
+            } catch (importError) {
+              console.error('Error importing cleanQuestions:', importError)
+              questionsData = []
+            }
             break
           case 'phone-style':
-            const { phoneQuestions } = await import('@/data/phoneQuestions')
-            questionsData = phoneQuestions
+            try {
+              const { phoneQuestions } = await import('@/data/phoneQuestions')
+              questionsData = phoneQuestions
+            } catch (importError) {
+              console.error('Error importing phoneQuestions:', importError)
+              questionsData = []
+            }
             break
           case 'photo-style':
-            const { photoQuestions } = await import('@/data/photoQuestions')
-            questionsData = photoQuestions
+            try {
+              const { photoQuestions } = await import('@/data/photoQuestions')
+              questionsData = photoQuestions
+            } catch (importError) {
+              console.error('Error importing photoQuestions:', importError)
+              questionsData = []
+            }
             break
           case 'dessert-style':
-            const { dessertQuestions } = await import('@/data/dessertQuestions')
-            questionsData = dessertQuestions
+            try {
+              const { dessertQuestions } = await import('@/data/dessertQuestions')
+              questionsData = dessertQuestions
+            } catch (importError) {
+              console.error('Error importing dessertQuestions:', importError)
+              questionsData = []
+            }
             break
           default:
             questionsData = questions
         }
         
+        console.log('Final questions data:', questionsData)
         setLoadedQuestions(questionsData)
       } catch (error) {
         console.error('Error loading questions:', error)
@@ -91,6 +114,7 @@ export default function QuizTestTemplate({
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-lg text-gray-600">질문을 불러오는 중...</p>
+          <p className="text-sm text-gray-500 mt-2">testId: {testId}</p>
         </div>
       </div>
     )
