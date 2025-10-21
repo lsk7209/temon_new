@@ -58,49 +58,40 @@ export default function QuizTestTemplate({
             break
           case 'phone-style':
             try {
-              const { phoneQuestions } = await import('@/data/phoneQuestions')
-              questionsData = phoneQuestions.map(q => ({
+              const { PHONE_QUESTIONS } = await import('@/data/phoneQuestions')
+              questionsData = PHONE_QUESTIONS.map(q => ({
                 id: q.id,
-                title: q.question,
-                options: [
-                  { label: q.choiceA.text, tags: q.choiceA.tags },
-                  { label: q.choiceB.text, tags: q.choiceB.tags }
-                ]
+                title: q.title,
+                options: q.options
               }))
             } catch (importError) {
-              console.error('Error importing phoneQuestions:', importError)
+              console.error('Error importing PHONE_QUESTIONS:', importError)
               questionsData = []
             }
             break
           case 'photo-style':
             try {
-              const { photoQuestions } = await import('@/data/photoQuestions')
-              questionsData = photoQuestions.map(q => ({
+              const { PHOTO_QUESTIONS } = await import('@/data/photoQuestions')
+              questionsData = PHOTO_QUESTIONS.map(q => ({
                 id: q.id,
-                title: q.question,
-                options: [
-                  { label: q.choiceA.text, tags: q.choiceA.tags },
-                  { label: q.choiceB.text, tags: q.choiceB.tags }
-                ]
+                title: q.title,
+                options: q.options
               }))
             } catch (importError) {
-              console.error('Error importing photoQuestions:', importError)
+              console.error('Error importing PHOTO_QUESTIONS:', importError)
               questionsData = []
             }
             break
           case 'dessert-style':
             try {
-              const { dessertQuestions } = await import('@/data/dessertQuestions')
-              questionsData = dessertQuestions.map(q => ({
+              const { DESSERT_QUESTIONS } = await import('@/data/dessertQuestions')
+              questionsData = DESSERT_QUESTIONS.map(q => ({
                 id: q.id,
-                title: q.question,
-                options: [
-                  { label: q.choiceA.text, tags: q.choiceA.tags },
-                  { label: q.choiceB.text, tags: q.choiceB.tags }
-                ]
+                title: q.title,
+                options: q.options
               }))
             } catch (importError) {
-              console.error('Error importing dessertQuestions:', importError)
+              console.error('Error importing DESSERT_QUESTIONS:', importError)
               questionsData = []
             }
             break
