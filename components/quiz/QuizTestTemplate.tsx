@@ -59,7 +59,14 @@ export default function QuizTestTemplate({
           case 'phone-style':
             try {
               const { phoneQuestions } = await import('@/data/phoneQuestions')
-              questionsData = phoneQuestions
+              questionsData = phoneQuestions.map(q => ({
+                id: q.id,
+                title: q.question,
+                options: [
+                  { label: q.choiceA.text, tags: q.choiceA.tags },
+                  { label: q.choiceB.text, tags: q.choiceB.tags }
+                ]
+              }))
             } catch (importError) {
               console.error('Error importing phoneQuestions:', importError)
               questionsData = []
@@ -68,7 +75,14 @@ export default function QuizTestTemplate({
           case 'photo-style':
             try {
               const { photoQuestions } = await import('@/data/photoQuestions')
-              questionsData = photoQuestions
+              questionsData = photoQuestions.map(q => ({
+                id: q.id,
+                title: q.question,
+                options: [
+                  { label: q.choiceA.text, tags: q.choiceA.tags },
+                  { label: q.choiceB.text, tags: q.choiceB.tags }
+                ]
+              }))
             } catch (importError) {
               console.error('Error importing photoQuestions:', importError)
               questionsData = []
@@ -77,7 +91,14 @@ export default function QuizTestTemplate({
           case 'dessert-style':
             try {
               const { dessertQuestions } = await import('@/data/dessertQuestions')
-              questionsData = dessertQuestions
+              questionsData = dessertQuestions.map(q => ({
+                id: q.id,
+                title: q.question,
+                options: [
+                  { label: q.choiceA.text, tags: q.choiceA.tags },
+                  { label: q.choiceB.text, tags: q.choiceB.tags }
+                ]
+              }))
             } catch (importError) {
               console.error('Error importing dessertQuestions:', importError)
               questionsData = []
